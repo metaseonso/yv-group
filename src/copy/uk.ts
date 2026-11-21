@@ -1,0 +1,36 @@
+// Українська: draft by Claude, 2026-11-21. A member of the group writes the final words (Seonso: "translations will be by members of the group.").
+import type { Copy } from './types';
+
+export const uk: Copy = {
+  lang: 'uk',
+  name: 'Українська',
+  short: 'УКР',
+  title: 'YV Group — Той, кого ти шукаєш, шукає тебе',
+  description: 'Твій перший запуск має стати святом. І ми хочемо допомогти цьому святу статися.',
+  scroll: 'Гортай, щоб почати',
+  skip: 'До контактів',
+  nav: 'Мова',
+  lines: {
+    seek: 'Той, кого ти шукаєш, шукає тебе.',
+    clear: ['Коли твоя історія ', 'ясна', ','],
+    move: 'вони приходять, готові рушати.',
+    journeyA: 'Кожен запуск — це подорож.',
+    journeyB: 'Жодну велику подорож не проходять наодинці.',
+    firstLaunch: 'Твій перший запуск',
+    celebration: 'має стати святом.',
+    partA: 'І ми хочемо бути частиною цього',
+    partB: 'і допомогти святу статися.',
+    crowd: 'Тож коли натовп почне',
+    gather: 'збиратися,',
+    sky: 'ми запалимо небо.',
+    steps: 'Від перших кроків',
+    groove: 'до того, як усі впіймають ритм.',
+    reach: 'Напиши нам.',
+    promise: 'Ми любимо показувати новим друзям, що ми завжди поруч.',
+  },
+  pass: { title: 'Ранній доступ', admit: 'Вхід для одного', night: 'Вечір відкриття' },
+  cards: ['Інвестори', 'Стратегічні партнери', 'Гравці', 'Медіа', 'Автори', 'Спільнота', 'Клієнти', 'Друзі'],
+  guest: 'Гість',
+  contact: { title: 'Lorem ipsum dolor', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', email: 'lorem@ipsum.dolor' },
+  draftNote: 'Чорновий переклад: остаточний текст напише учасник групи.',
+};

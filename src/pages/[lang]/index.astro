@@ -1,0 +1,11 @@
+---
+import Film from '../../components/Film.astro';
+import { COPY } from '../../copy';
+import type { Lang } from '../../copy/types';
+
+export function getStaticPaths() {
+  return (['pt', 'uk', 'ru'] as Lang[]).map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+---
+<Film copy={COPY[lang]} />

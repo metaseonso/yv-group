@@ -1,0 +1,36 @@
+---
+// Early-access passes, then the guests' cards: paper that flies in, hangs, and flies out.
+import { CARDS, PASSES } from '../film/beats';
+import type { Copy } from '../copy/types';
+interface Props { copy: Copy }
+const { copy } = Astro.props;
+const passSpots = [[34, -0.2, -6], [50, 0.16, 4], [64, -0.04, -2]] as const;
+const cardSpots = [
+  [30, -0.3, -7], [44, 0.26, 5], [58, -0.12, 3], [36, 0.06, -4],
+  [70, 0.3, 6], [52, -0.34, -3], [66, -0.02, 8], [40, 0.36, -5],
+] as const;
+const fly = (start: number, hang: number, hx: number, rot: number) => `${start} ${start + hang} ${hx} ${rot}`;
+---
+<div class="cards" aria-hidden="true">
+  {passSpots.map(([top, hx, rot], i) => (
+    <div class="flyer" style={`top:${top}%`} data-fly={fly(PASSES.start + i * PASSES.step, PASSES.hang, hx, rot)}>
+      <div class="pass sway">
+        <span class="pass-title">{copy.pass.title}</span>
+        <span class="pass-admit">{copy.pass.admit}</span>
+        <span class="pass-foot"><span>{copy.pass.night}</span><span>Nº 000{i + 1}</span></span>
+      </div>
+    </div>
+  ))}
+  {copy.cards.map((label, i) => {
+    const [top, hx, rot] = cardSpots[i % cardSpots.length]!;
+    return (
+      <div class="flyer" style={`top:${top}%`} data-fly={fly(CARDS.start + i * CARDS.step, CARDS.hang, hx, rot)}>
+        <div class="badge sway">
+          <span class="badge-hole"></span>
+          <span class="badge-role">{label}</span>
+          <span class="badge-guest">{copy.guest}</span>
+        </div>
+      </div>
+    );
+  })}
+</div>

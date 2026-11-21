@@ -1,0 +1,26 @@
+{
+  "name": "yv",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --import tsx --test \"laws/**/*.test.ts\"",
+    "lint": "blocklint .",
+    "typecheck": "astro sync && tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/literata": "^5.3.0",
+    "@seonso/block-law": "git+ssh://git@github.com/metaseonso/block-law.git#main",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

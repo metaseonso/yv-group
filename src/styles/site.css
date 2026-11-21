@@ -1,0 +1,285 @@
+/* YV Group. One night scene in cut paper: black and white, warm glows here and there.
+   Every colour, size and timing used on the page is a token here. */
+:root {
+  --night: #050506;
+  --sky-top: #040405;
+  --sky-low: #16151a;
+  --hill-far: #1b1a20;
+  --hill-mid: #111114;
+  --floor: #0b0b0d;
+  --ink: #050506;
+  --edge: rgb(255 236 214 / 0.2);
+  --paper: #f1ece2;
+  --paper-ink: #191714;
+  --text: #f3efe7;
+  --text-soft: rgb(243 239 231 / 0.72);
+  --glow: 255 168 88;
+  --glow-pale: 255 222 170;
+  --font: 'Literata Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --fs-line: clamp(1.6rem, 1rem + 2.6vw, 3.4rem);
+  --fs-small: clamp(1.1rem, 0.85rem + 1.2vw, 2rem);
+  --fs-ui: 0.82rem;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Chrome: skip link and language paths ─────────────────────────────── */
+.skip {
+  position: fixed;
+  left: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  z-index: 20;
+  padding: 12px 16px;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 6px;
+  transform: translateY(-200%);
+}
+.skip:focus-visible { transform: none; }
+
+.langs {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 6px);
+  right: max(8px, env(safe-area-inset-right, 0px));
+  z-index: 10;
+  display: flex;
+}
+.langs a {
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 44px;
+  padding: 0 8px;
+  color: var(--text-soft);
+  font-size: var(--fs-ui);
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.langs a:hover, .langs a[aria-current] { color: var(--text); }
+.langs a[aria-current] { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+:focus-visible { outline: 2px solid rgb(var(--glow-pale)); outline-offset: 3px; }
+
+/* ── The stage ────────────────────────────────────────────────────────── */
+.stage {
+  --u: min(calc(100svh / 1000), calc(100vw / 620), 1px);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to top, var(--sky-low) 0%, var(--sky-top) 62%);
+}
+.film .track { height: calc(var(--beats) * var(--beat) + 100svh); }
+.film .stage { position: sticky; top: 0; height: 100svh; }
+html:not(.film) .world,
+html:not(.film) .sky,
+html:not(.film) .tint,
+html:not(.film) .cards,
+html:not(.film) .prints,
+html:not(.film) .logo .mark { display: none; }
+
+.sky, .world, .layer, .tint, .cards, .pagebox, .verses { position: absolute; inset: 0; }
+.sky { width: 100%; height: 100%; }
+.tint, .cards, .verses { pointer-events: none; }
+.layer { perspective: calc(1400 * var(--u)); will-change: transform; }
+.unit-probe { position: absolute; width: calc(1000 * var(--u)); height: 0; visibility: hidden; }
+
+.piece {
+  position: absolute;
+  left: calc(50% + (var(--x) - var(--w) / 2) * var(--u));
+  bottom: calc(var(--y) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  transform-origin: 50% 100%;
+}
+.piece > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.film [data-pop] { transform: rotateX(90deg); opacity: 0; }
+
+/* ── Landscape ────────────────────────────────────────────────────────── */
+.horizon-glow { position: absolute; inset: 40% 0 0; background: linear-gradient(to top, rgb(70 66 78 / 0.35), transparent); }
+.moon { position: absolute; right: 14%; top: 8%; width: calc(84 * var(--u)); fill: #ece6d8; filter: drop-shadow(0 0 calc(28 * var(--u)) rgb(255 230 190 / 0.35)); }
+@media (max-aspect-ratio: 4 / 5) { .moon { top: 38%; right: 12%; } }
+.ridge.far path { fill: var(--hill-far); stroke: var(--edge); stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
+.ridge.mid path { fill: var(--hill-mid); stroke: var(--edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.tree path { fill: #0d0d10; stroke: var(--edge); stroke-width: 1.4; }
+.floor .ground { fill: var(--floor); stroke: var(--edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.floor .trail { fill: none; stroke: rgb(var(--glow-pale) / 0.28); stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.film .floor .trail { stroke-dashoffset: 1; }
+.grass path { fill: #000; }
+.grass.flip { transform: scaleX(-1); }
+
+/* ── People ───────────────────────────────────────────────────────────── */
+.fig svg { stroke-linecap: round; stroke-linejoin: round; transform-origin: 50% 100%; }
+.fig polyline { fill: none; }
+.fig .edge { fill: var(--edge); stroke: var(--edge); }
+.fig .ink { fill: var(--ink); stroke: var(--ink); }
+.crowd { display: contents; }
+.crowd.is-quiet .dancer { animation: sway 3.2s ease-in-out var(--dd) infinite alternate; }
+.crowd.is-dancing .dancer { animation: dance var(--dt) ease-in-out var(--dd) infinite alternate; }
+.fig.is-walking .dancer { animation: walk 0.42s ease-in-out infinite alternate; }
+@keyframes dance { from { transform: rotate(-6deg) translateY(0); } to { transform: rotate(6deg) translateY(-5%); } }
+@keyframes sway { from { transform: rotate(-1.5deg); } to { transform: rotate(1.5deg); } }
+@keyframes walk { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-3%) rotate(2deg); } }
+
+.rocket path { fill: #cfc8bb; }
+
+/* ── Fire ─────────────────────────────────────────────────────────────── */
+.flame-wrap { position: absolute; left: 50%; width: var(--fs); aspect-ratio: 60 / 90; translate: -50% 0; transform-origin: 50% 100%; }
+.bonfire .flame-wrap { bottom: 12%; }
+.brazier .flame-wrap { bottom: 48%; }
+.torch .flame-wrap { bottom: 74%; }
+.flame { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform-origin: 50% 100%; animation: flicker 1.1s ease-in-out infinite alternate; }
+.t1 { fill: rgb(var(--glow)); }
+.t2 { fill: #ffc76e; }
+.t3 { fill: #fff3d4; }
+.glow {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: calc(var(--gs) * var(--u));
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--glow) / 0.42), rgb(var(--glow) / 0.13) 45%, transparent);
+  animation: breathe 2.6s ease-in-out infinite alternate;
+}
+.ember {
+  position: absolute;
+  left: 50%;
+  bottom: 40%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffd9a0;
+  box-shadow: 0 0 6px rgb(var(--glow));
+  opacity: 0;
+  animation: rise var(--et) linear var(--ed) infinite;
+}
+@keyframes flicker { from { transform: scale(1, 1) skewX(0deg); } 50% { transform: scale(0.94, 1.07) skewX(2deg); } to { transform: scale(1.05, 0.94) skewX(-2deg); } }
+@keyframes breathe { from { opacity: 0.8; } to { opacity: 1; } }
+@keyframes rise {
+  0% { transform: translate(0, 0); opacity: 0; }
+  12% { opacity: 1; }
+  100% { transform: translate(calc(var(--ex) * var(--u) * 1.6), calc(-320 * var(--u))); opacity: 0; }
+}
+.logs path { fill: #1b1511; stroke: var(--edge); stroke-width: 1.2; }
+.bonfire .logs { inset: auto 0 0; height: 21%; }
+.stand path, .pole path { fill: #0a0a0b; stroke: var(--edge); stroke-width: 1.2; }
+.brazier .stand { inset: auto 0 0; height: 60%; }
+.torch .pole { inset: auto 0 0; height: 77%; }
+
+/* ── Light over the scene ─────────────────────────────────────────────── */
+.tint { opacity: 0; }
+.skyflash { background: radial-gradient(ellipse at 50% 25%, rgb(255 244 222 / 0.55), transparent 70%); }
+.warm { background: linear-gradient(to top, rgb(var(--glow) / 0.34), rgb(var(--glow) / 0.08) 55%, transparent); }
+.inferno { background: radial-gradient(circle at 50% 72%, #fff6dc, #ffc463 28%, #ff8b2f 58%, #9c360b); }
+.flash { background: #fbf8f1; }
+
+/* ── Passes and guest cards ───────────────────────────────────────────── */
+.flyer { position: absolute; left: 50%; width: calc(250 * var(--u)); margin-left: calc(-125 * var(--u)); will-change: transform; }
+.film .flyer { visibility: hidden; }
+.pass, .badge {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: calc(6 * var(--u));
+  box-shadow: 0 calc(14 * var(--u)) calc(34 * var(--u)) rgb(0 0 0 / 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.pass { padding: calc(16 * var(--u)) calc(20 * var(--u)); border-left: calc(3 * var(--u)) dashed rgb(25 23 20 / 0.35); gap: calc(6 * var(--u)); }
+.pass-title { font-size: calc(26 * var(--u)); font-weight: 650; letter-spacing: 0.06em; }
+.pass-admit { font-size: calc(14 * var(--u)); }
+.pass-foot { display: flex; justify-content: space-between; font-size: calc(11 * var(--u)); opacity: 0.7; border-top: 1px solid rgb(25 23 20 / 0.25); padding-top: calc(6 * var(--u)); }
+.badge { align-items: center; padding: calc(16 * var(--u)) calc(14 * var(--u)) calc(18 * var(--u)); gap: calc(8 * var(--u)); }
+.badge-hole { width: calc(34 * var(--u)); height: calc(8 * var(--u)); border-radius: 99px; background: var(--night); }
+.badge-role { font-size: calc(22 * var(--u)); font-weight: 650; letter-spacing: 0.05em; text-align: center; line-height: 1.15; }
+.badge-guest { font-size: calc(11 * var(--u)); opacity: 0.65; }
+.sway { animation: hang 2.4s ease-in-out infinite alternate; transform-origin: 50% 0; }
+@keyframes hang { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg); } }
+
+/* ── The white page ───────────────────────────────────────────────────── */
+.pagebox { perspective: 2200px; }
+.film .pagebox { visibility: hidden; }
+.page {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, #faf7f0, var(--paper) 70%, #e2dccf);
+  transform-origin: 0 50%;
+  backface-visibility: hidden;
+}
+html:not(.film) .page { position: relative; padding: 18svh 16px; }
+.prints { position: absolute; inset: 0; width: 100%; height: 100%; }
+.prints g { fill: var(--paper-ink); }
+.film .prints g { opacity: 0; }
+.page-shade { position: absolute; inset: 0; background: linear-gradient(to right, rgb(0 0 0 / 0.35), transparent); opacity: 0; }
+.page .line { color: var(--paper-ink); text-shadow: none; }
+
+/* ── Words ────────────────────────────────────────────────────────────── */
+.verse, .page-line {
+  position: absolute;
+  top: 13svh;
+  left: 50%;
+  width: min(100% - 32px, 21ch);
+  translate: -50% 0;
+  text-align: center;
+  font-size: var(--fs-line);
+}
+html:not(.film) .verses { position: static; padding: 0 16px; }
+html:not(.film) .verse { position: static; translate: none; width: auto; max-width: 21ch; margin: 24svh auto; }
+html:not(.film) .page-line { position: static; translate: none; width: auto; margin: 0 auto; }
+.line { margin: 0; line-height: 1.14; font-weight: 380; letter-spacing: -0.01em; text-wrap: balance; text-shadow: 0 2px 18px rgb(0 0 0 / 0.85); }
+.line + .line { margin-top: 0.3em; }
+.line.small { font-size: var(--fs-small); line-height: 1.3; }
+.film .line, .film .hint, .film .logo { opacity: 0; }
+.word { position: relative; font-weight: 620; }
+.word-glow { position: absolute; inset: 0; color: #fff4dc; text-shadow: 0 0 0.3em rgb(var(--glow-pale) / 0.95), 0 0 0.9em rgb(var(--glow) / 0.75); opacity: 0; }
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 7svh);
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-ui);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+html:not(.film) .hint { display: none; }
+
+.logo { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(22 * var(--u)); }
+.mark { width: calc(120 * var(--u)); fill: none; stroke: var(--text); stroke-width: 1.5; }
+.mark text { fill: var(--text); stroke: none; font-family: var(--font); font-size: 34px; font-weight: 500; letter-spacing: 2px; }
+.wordmark { margin: 0; font-size: clamp(1.4rem, 0.9rem + 2vw, 2.6rem); letter-spacing: 0.42em; font-weight: 500; padding-left: 0.42em; }
+html:not(.film) .logo { position: static; padding: 12svh 0; }
+
+/* ── Contact ──────────────────────────────────────────────────────────── */
+.contact {
+  position: relative;
+  min-height: 70svh;
+  padding-block: 18svh calc(env(safe-area-inset-bottom, 0px) + 10svh);
+  padding-inline: 16px;
+  text-align: center;
+  background: var(--night);
+}
+.contact h2 { margin: 0 0 0.5em; font-size: var(--fs-small); font-weight: 450; }
+.contact p { margin: 0 auto 1em; max-width: 34ch; color: var(--text-soft); }
+.contact .email { color: var(--text); letter-spacing: 0.04em; }
+.contact .draft, .contact .foot { font-size: var(--fs-ui); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dancer, .flame, .glow, .sway, .crowd .dancer { animation: none !important; }
+  .ember { display: none; }
+  .langs a { transition: none; }
+}

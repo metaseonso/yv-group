@@ -1,0 +1,19 @@
+---
+// A paper flame: three layered tongues that flicker on the compositor. `ignite` is the beat it lights.
+interface Props { ignite: number; width: number; glow: number; embers?: number }
+const { ignite, width, glow, embers = 0 } = Astro.props;
+const sparks = Array.from({ length: embers }, (_, i) => ({
+  x: ((i * 37) % 60) - 30,
+  t: 2.2 + ((i * 53) % 17) / 10,
+  dl: -((i * 71) % 29) / 10,
+}));
+---
+<div class="flame-wrap" data-ignite={ignite} style={`--fs:${width}%;--gs:${glow}`}>
+  <div class="glow"></div>
+  <svg class="flame" viewBox="0 0 60 90" aria-hidden="true">
+    <path class="tongue t1" d="M30 2 C40 22 56 34 54 58 C53 78 42 88 30 88 C18 88 7 78 6 58 C5 40 22 30 30 2 Z" />
+    <path class="tongue t2" d="M31 20 C38 34 48 44 46 62 C45 76 38 84 30 84 C22 84 15 76 15 62 C15 48 27 40 31 20 Z" />
+    <path class="tongue t3" d="M30 42 C35 52 40 58 39 68 C38 77 35 82 30 82 C25 82 22 77 21 68 C21 60 27 54 30 42 Z" />
+  </svg>
+  {sparks.map((s) => <i class="ember" style={`--ex:${s.x};--et:${s.t}s;--ed:${s.dl}s`}></i>)}
+</div>

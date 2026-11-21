@@ -1,0 +1,28 @@
+---
+// The white storybook page after the sky goes white: footprints walk up to the words, then the page turns.
+import { LINES, PRINTS } from '../film/beats';
+import { FOOT, TOES } from './shapes';
+interface Props { steps: string }
+const { steps } = Astro.props;
+const prints = Array.from({ length: PRINTS.count }, (_, i) => {
+  const p = i / (PRINTS.count - 1);
+  const x = 470 + 90 * Math.sin(p * 2.4) + (i % 2 ? 26 : -26);
+  const y = 960 - p * 400;
+  const turn = 12 * Math.cos(p * 2.4);
+  return { x, y, turn, flip: i % 2 === 1, at: PRINTS.start + i * PRINTS.step };
+});
+---
+<div class="pagebox" data-page-box>
+  <div class="page" data-page>
+    <p class="line page-line" data-in={LINES.steps[0]} data-out={LINES.steps[1]}>{steps}</p>
+    <svg class="prints" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      {prints.map((f) => (
+        <g data-print={f.at} transform={`translate(${f.x} ${f.y}) rotate(${f.turn}) scale(${f.flip ? -0.9 : 0.9} 0.9) translate(-20 -40)`}>
+          <path d={FOOT} />
+          {TOES.map(([cx, cy, r]) => <circle cx={cx} cy={cy} r={r} />)}
+        </g>
+      ))}
+    </svg>
+    <div class="page-shade" data-page-shade></div>
+  </div>
+</div>

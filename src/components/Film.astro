@@ -1,0 +1,87 @@
+---
+// The whole page for one language: the film on a sticky stage, then the contact section.
+import '@fontsource-variable/literata/wght.css';
+import latin from '@fontsource-variable/literata/files/literata-latin-wght-normal.woff2?url';
+import cyrillic from '@fontsource-variable/literata/files/literata-cyrillic-wght-normal.woff2?url';
+import '../styles/site.css';
+import { BEAT_SVH, LINES, TOTAL } from '../film/beats';
+import { COPY, LANGS, pathFor } from '../copy';
+import type { Copy } from '../copy/types';
+import Cards from '../scene/Cards.astro';
+import Page from '../scene/Page.astro';
+import Scene from '../scene/Scene.astro';
+
+interface Props { copy: Copy }
+const { copy } = Astro.props;
+const l = copy.lines;
+const font = copy.lang === 'uk' || copy.lang === 'ru' ? cyrillic : latin;
+const show = (k: keyof typeof LINES) => ({ 'data-in': LINES[k][0], 'data-out': LINES[k][1] });
+---
+<html lang={copy.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{copy.title}</title>
+    <meta name="description" content={copy.description} />
+    <meta name="theme-color" content="#050506" />
+    <link rel="preload" href={font} as="font" type="font/woff2" crossorigin />
+    {LANGS.map((code) => <link rel="alternate" hreflang={code} href={pathFor(code)} />)}
+    <link rel="alternate" hreflang="x-default" href="/" />
+    <script is:inline>document.documentElement.classList.add('film')</script>
+  </head>
+  <body>
+    <a class="skip" href="#contact">{copy.skip}</a>
+    <nav class="langs" aria-label={copy.nav}>
+      {LANGS.map((code) => (
+        <a href={pathFor(code)} lang={code} hreflang={code} aria-current={code === copy.lang ? 'page' : undefined} title={COPY[code].name}>{COPY[code].short}</a>
+      ))}
+    </nav>
+    <main>
+      <div class="track" style={`--beats:${TOTAL};--beat:${BEAT_SVH}svh`}>
+        <div class="stage">
+          <canvas class="sky" aria-hidden="true"></canvas>
+          <Scene />
+          <div class="tint skyflash" data-k="skyflash"></div>
+          <div class="tint warm" data-k="warm"></div>
+          <Cards copy={copy} />
+          <div class="tint inferno" data-k="inferno"></div>
+          <div class="verses">
+            <p class="hint" {...show('scroll')}>{copy.scroll}</p>
+            <div class="verse"><p class="line" {...show('seek')}>{l.seek}</p></div>
+            <div class="verse">
+              <p class="line" {...show('clear')}>{l.clear[0]}<span class="word">{l.clear[1]}<span class="word-glow" data-ignite="3.6">{l.clear[1]}</span></span>{l.clear[2]}</p>
+            </div>
+            <div class="verse"><p class="line" {...show('move')}>{l.move}</p></div>
+            <div class="verse"><p class="line" {...show('journeyA')}>{l.journeyA}</p><p class="line small" {...show('journeyB')}>{l.journeyB}</p></div>
+            <div class="verse"><p class="line" {...show('firstLaunch')}>{l.firstLaunch}</p><p class="line" {...show('celebration')}>{l.celebration}</p></div>
+            <div class="verse"><p class="line" {...show('partA')}>{l.partA}</p><p class="line" {...show('partB')}>{l.partB}</p></div>
+            <div class="verse"><p class="line" {...show('crowd')}>{l.crowd}</p><p class="line" {...show('gather')}>{l.gather}</p></div>
+            <div class="verse"><p class="line" {...show('sky')}>{l.sky}</p></div>
+          </div>
+          <Page steps={l.steps} />
+          <div class="verses">
+            <div class="verse"><p class="line" {...show('groove')}>{l.groove}</p></div>
+            <div class="verse"><p class="line" {...show('reach')}>{l.reach}</p></div>
+            <div class="verse"><p class="line small" {...show('promise')}>{l.promise}</p></div>
+          </div>
+          <div class="tint flash" data-k="flash"></div>
+          <div class="logo" {...show('logo')}>
+            <svg class="mark" viewBox="0 0 100 100" role="img" aria-label="YV Group (placeholder mark)">
+              <circle cx="50" cy="50" r="44" />
+              <text x="50" y="62" text-anchor="middle">YV</text>
+            </svg>
+            <p class="wordmark">YV GROUP</p>
+          </div>
+        </div>
+      </div>
+      <section class="contact" id="contact" tabindex="-1">
+        <h2>{copy.contact.title}</h2>
+        <p>{copy.contact.body}</p>
+        <p class="email">{copy.contact.email}</p>
+        {copy.draftNote && <p class="draft">{copy.draftNote}</p>}
+        <p class="foot">YV Group · Lorem ipsum</p>
+      </section>
+    </main>
+    <script>import '../film/main';</script>
+  </body>
+</html>

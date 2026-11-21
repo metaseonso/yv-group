@@ -1,0 +1,36 @@
+// Português: draft by Claude, 2026-11-21. A member of the group writes the final words (Seonso: "translations will be by members of the group.").
+import type { Copy } from './types';
+
+export const pt: Copy = {
+  lang: 'pt',
+  name: 'Português',
+  short: 'PT',
+  title: 'YV Group — Quem você procura está procurando você',
+  description: 'O seu primeiro lançamento deve ser uma celebração. Queremos fazer parte de fazer essa festa acontecer.',
+  scroll: 'Role para começar',
+  skip: 'Ir para o contato',
+  nav: 'Idioma',
+  lines: {
+    seek: 'Quem você procura está procurando você.',
+    clear: ['Quando a sua história é ', 'clara', ','],
+    move: 'eles chegam prontos para se mover.',
+    journeyA: 'Todo lançamento é uma jornada.',
+    journeyB: 'Nenhuma grande jornada foi feita para ser percorrida sozinho.',
+    firstLaunch: 'O seu primeiro lançamento',
+    celebration: 'deve ser uma celebração.',
+    partA: 'E nós queremos fazer parte',
+    partB: 'de fazer essa festa acontecer.',
+    crowd: 'Então, quando a multidão começar',
+    gather: 'a se reunir,',
+    sky: 'a gente ilumina o céu.',
+    steps: 'Dos primeiros passos',
+    groove: 'até todo mundo entrar no ritmo.',
+    reach: 'Fale com a gente.',
+    promise: 'Adoramos mostrar aos nossos novos amigos que estamos com eles.',
+  },
+  pass: { title: 'Acesso antecipado', admit: 'Entrada individual', night: 'Noite de estreia' },
+  cards: ['Investidores', 'Parceiros estratégicos', 'Jogadores', 'Imprensa', 'Criadores', 'Comunidade', 'Clientes', 'Amigos'],
+  guest: 'Convidado',
+  contact: { title: 'Lorem ipsum dolor', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', email: 'lorem@ipsum.dolor' },
+  draftNote: 'Tradução provisória: um membro do grupo escreverá o texto final.',
+};

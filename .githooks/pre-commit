@@ -1,0 +1,6 @@
+#!/bin/sh
+# Block Law: a red lint or a red test does not commit. Installed by `npx github:metaseonso/block-law init`
+# (git config core.hooksPath .githooks). This hook is where the law's checks run: on this machine, on every commit,
+# with no GitHub Actions and no billing (Seonso, 2026-10-19).
+npx --no blocklint . || exit 1
+npm test || exit 1
