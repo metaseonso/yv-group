@@ -26,7 +26,7 @@ const show = (k: keyof typeof LINES) => ({ 'data-in': LINES[k][0], 'data-out': L
     <meta name="theme-color" content="#050506" />
     <link rel="preload" href={font} as="font" type="font/woff2" crossorigin />
     {LANGS.map((code) => <link rel="alternate" hreflang={code} href={pathFor(code)} />)}
-    <link rel="alternate" hreflang="x-default" href="/" />
+    <link rel="alternate" hreflang="x-default" href={pathFor('en')} />
     <script is:inline>document.documentElement.classList.add('film')</script>
   </head>
   <body>

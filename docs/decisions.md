@@ -12,3 +12,6 @@ Choices the brief did not fix. Newest last.
 | 2026-11-21 | Block Law installed with `init`; its sample components, connections and `app/main.ts` removed | The web-app standard keeps two rules (80-line functions, no import loops) and no five-layer folders | Keep the samples | Yes |
 | 2026-11-21 | `laws/` kept from the template | `blocklint` refuses a repository without the four laws (B010), though the web-app standard drops the verb registry | Remove them and fail lint | Yes |
 | 2026-11-21 | Typecheck covers `src/` only | The law package's `laws/` files do not typecheck under the browser lib (its own code); `npm test` still runs them | Fix in `metaseonso/block-law` | Yes |
+| 2026-11-21 | The org chart lives in `org-chart/` (source `ORG-CHART.md`, page `org-chart.html`), outside the Astro build, published as the claude.ai artifact "YV Organisation Chart" | Same home and channel as LTP's chart (`ltp-daily/org-chart/`, an artifact); an internal document, not a page of the public site | A route on the site | Yes |
+| 2026-11-21 | YV tiers numbered 1–4 (Contractor, Partner, Managing Partner, GMP) | No employee ladder below, so LTP's 4–6 would start at an empty 4 | Keep LTP's numbers | Yes, pending Seonso (C8) |
+| 2026-11-21 | Protocols numbered P1–P18 with P1 = the Season | Seonso's own "p= protocol, p1 early access" | Keep LTP's B-numbers | Yes |

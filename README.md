@@ -17,7 +17,7 @@ The YV Group site: one scroll film per language, a children's pop-up storybook a
 | Paper pieces and who stands where | `src/scene/` (`layout.ts` for positions and pop beats) |
 | Colours, sizes, motion tokens | `src/styles/site.css` (`:root`) |
 | Block Law | `blocklint.config.json`, `laws/`, `.githooks/pre-commit` |
-| Cloudflare (static-assets Worker `yv-group`) | `wrangler.jsonc`, `public/_headers` (hashed files cached a year) |
+| GitHub Pages preview (branch `gh-pages`, base `/yv-group`) | `astro.config.mjs`, `public/.nojekyll` (keeps `_astro/`) |
 
 ## When
 
@@ -26,4 +26,4 @@ The YV Group site: one scroll film per language, a children's pop-up storybook a
 | Work on it | `npm run dev` (http://localhost:4321) |
 | Before a commit (the hook runs lint and test) | `python "Desktop/Seonso PoV/scripts/heavy.py" run --owner yv -- npm run build` and `npm run typecheck` |
 | Change a scene's timing | edit `src/film/beats.ts` only |
-| Deploy the preview | `python "Desktop/Seonso PoV/scripts/heavy.py" run --owner yv -- npm run deploy` → https://yv-group.livingtrustproperty.workers.dev |
+| Deploy the preview | `python "Desktop/Seonso PoV/scripts/heavy.py" run --owner yv -- npm run deploy` → https://metaseonso.github.io/yv-group/ |

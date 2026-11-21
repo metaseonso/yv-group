@@ -1,0 +1,443 @@
+<title>YV Organisation Chart</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,400&display=swap">
+<style>
+/* Layout: a night page of cut paper. Sections are sheets on the dark; the warm glow marks only where people or money move.
+   Single dark look by choice: YV's own tokens (src/styles/site.css). */
+:root{
+  color-scheme:dark;
+  --night:#050506; --sheet:#0e0d11; --sheet-2:#16151a;
+  --rule:rgb(255 236 214 / .14);
+  --paper:#f1ece2; --paper-ink:#191714; --paper-soft:#5a544b;
+  --text:#f3efe7; --soft:rgb(243 239 231 / .72);
+  --glow:255 168 88; --glow-pale:255 222 170;
+  --font:"Literata","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --fs-label:.78rem; --fs-body:1.0625rem; --fs-h3:1.3rem;
+  --fs-h2:clamp(1.6rem,1.1rem + 1.8vw,2.4rem); --fs-h1:clamp(2.4rem,1.4rem + 4.2vw,4.6rem);
+}
+*{box-sizing:border-box}
+body{background:var(--night);color:var(--text);font-family:var(--font);font-size:var(--fs-body);line-height:1.55;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-weight:500;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:var(--fs-h1);line-height:1.02}
+h2{font-size:var(--fs-h2);line-height:1.12}
+h3{font-size:var(--fs-h3);line-height:1.2}
+p{margin:0}
+.label{font-size:var(--fs-label);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-variant-numeric:tabular-nums}
+.glow{color:rgb(var(--glow-pale))}
+:focus-visible{outline:2px solid rgb(var(--glow-pale));outline-offset:3px}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:center;padding-block:56px 40px;border-bottom:1px solid var(--rule)}
+.hero .copy{display:grid;gap:22px;min-width:0}
+.word{display:flex;align-items:baseline;gap:.5em;font-weight:600}
+.word b{font-size:2.2rem;letter-spacing:.06em;font-weight:600}
+.word span{font-size:.9rem;letter-spacing:.42em;color:var(--soft)}
+.lede{font-size:1.2rem;max-width:38ch;color:var(--soft)}
+.lede strong{color:var(--text);font-weight:500}
+.status{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--rule);border-radius:999px;font-size:var(--fs-label);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
+.pill.warm{border-color:rgb(var(--glow) / .5);color:rgb(var(--glow-pale))}
+.pill.warm::before{content:"";width:7px;height:7px;border-radius:50%;background:rgb(var(--glow));box-shadow:0 0 10px rgb(var(--glow))}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--font)}
+
+/* Sections */
+section.band{padding-block:56px;border-bottom:1px solid var(--rule)}
+.head{display:grid;gap:10px;max-width:64ch;margin-bottom:28px}
+.head p{color:var(--soft)}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:36px;align-items:start}
+
+/* Ladder */
+.ladder{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule)}
+.ladder li{display:grid;grid-template-columns:5.5rem minmax(0,1fr) minmax(0,1.1fr);gap:20px;padding-block:20px;border-bottom:1px solid var(--rule);align-items:start}
+.ladder .t{font-variant-numeric:tabular-nums}
+.ladder h3{margin-bottom:4px}
+.ladder .how{color:var(--soft);font-size:.98rem}
+.ladder .pay{font-size:.98rem}
+.ladder .pay .label{display:block;margin-bottom:2px}
+.gone{margin-top:18px;color:var(--soft);font-size:.95rem;max-width:70ch}
+.gone s{color:rgb(243 239 231 / .62)}
+
+/* Paper sheets (roles, clearance) */
+.sheets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.paper{background:var(--paper);color:var(--paper-ink);padding:22px;border-radius:3px;display:grid;gap:10px;align-content:start;box-shadow:6px 6px 0 rgb(0 0 0 / .55),0 0 0 1px rgb(255 255 255 / .04);transform-origin:50% 100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.paper .label{color:var(--paper-soft)}
+.paper p{color:var(--paper-ink)}
+.paper .pct{font-size:2.4rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+@media (hover:hover){.paper:hover{transform:translateY(-4px) rotate(-.4deg)}}
+
+/* Calculator */
+.card{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:22px;display:grid;gap:16px;min-width:0}
+.calc label{display:grid;gap:6px}
+.calc input[type=number]{font:500 1.15rem var(--font);font-variant-numeric:tabular-nums;padding:10px 12px;min-height:44px;border:1px solid var(--rule);border-radius:3px;background:var(--sheet-2);color:var(--text);width:100%}
+.calc .chk{display:flex;gap:12px;align-items:center;min-height:44px;cursor:pointer}
+.calc .chk input{width:20px;height:20px;accent-color:rgb(var(--glow))}
+.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.out{display:grid;border-top:1px solid var(--rule)}
+.out div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
+.out div span:last-child{font-weight:600}
+.out .tot span:last-child{color:rgb(var(--glow-pale))}
+.out .yv{color:var(--soft)}
+.note{color:var(--soft);font-size:.92rem}
+.split-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.split-table th,.split-table td{text-align:left;padding:12px 8px 12px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.split-table th{font-weight:400}
+.split-table td:nth-child(2){white-space:nowrap}
+.split-table tr.in td:first-child{padding-left:18px;color:var(--soft)}
+.split-table tr.sum td{font-weight:600;border-bottom:0}
+
+/* Season */
+.season{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+.steps li{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:14px;padding-block:14px;border-bottom:1px solid var(--rule);counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid rgb(var(--glow) / .55);color:rgb(var(--glow-pale));font-variant-numeric:tabular-nums;font-size:.95rem}
+.steps b{font-weight:600}
+.steps p{color:var(--soft);font-size:.98rem}
+.ring-orbit{transform-origin:180px 180px;animation:orbit 18s linear infinite}
+.ember{animation:breathe 3.2s ease-in-out infinite}
+.flow{stroke-dasharray:4 9;animation:flow 2.4s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{opacity:.45}}
+@keyframes flow{to{stroke-dashoffset:-26}}
+
+/* Protocol table */
+.scroll{overflow-x:auto}
+table.proto{width:100%;border-collapse:collapse;min-width:760px}
+table.proto th,table.proto td{text-align:left;padding:14px 12px 14px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.proto thead th{font-weight:400}
+table.proto td.code{font-variant-numeric:tabular-nums;white-space:nowrap;color:rgb(var(--glow-pale))}
+table.proto td.what{color:var(--soft)}
+table.proto th:nth-child(1){width:7%}table.proto th:nth-child(2){width:17%}table.proto th:nth-child(3){width:16%}table.proto th:nth-child(4){width:40%}table.proto th:nth-child(5){width:10%}
+table.proto td.from{white-space:nowrap;color:var(--soft);font-variant-numeric:tabular-nums}
+table.proto tr.removed td{color:rgb(243 239 231 / .62)}
+table.proto tr.removed td.name{text-decoration:line-through}
+.chip{display:inline-block;padding:6px 12px;border-radius:999px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;border:1px solid var(--rule)}
+.chip.new{background:rgb(var(--glow));color:#1a0e03;border-color:transparent}
+.chip.adapted{border-color:rgb(var(--glow) / .6);color:rgb(var(--glow-pale))}
+.chip.kept{color:var(--soft)}
+.chip.removed{color:rgb(243 239 231 / .62);border-style:dashed}
+
+/* Clearance */
+.clear{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.clear .paper{grid-template-columns:auto minmax(0,1fr);column-gap:16px}
+.clear .paper .n{grid-row:span 3;font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:#a3392f;line-height:1}
+.clear .paper h3{font-size:1.1rem}
+.clear .paper .prop{border-top:1px dashed rgb(25 23 20 / .25);padding-top:10px}
+.clear .paper .prop b{font-weight:600}
+
+/* Rules + variables */
+.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.rule{border-top:1px solid rgb(var(--glow) / .5);padding-top:14px;display:grid;gap:8px;align-content:start}
+.rule p{color:var(--soft);font-size:.98rem}
+.vars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 28px;list-style:none;margin:0;padding:0}
+.vars li{display:grid;grid-template-columns:3.6rem minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:.95rem}
+.vars li span:first-child{color:rgb(var(--glow-pale));font-variant-numeric:tabular-nums}
+.vars li span:last-child{color:var(--soft)}
+footer{padding-block:32px 48px;color:var(--soft);font-size:.9rem;display:grid;gap:6px}
+
+@media (max-width:900px){
+  .hero,.split,.season{grid-template-columns:minmax(0,1fr)}
+  .sheets,.rules{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vars{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .sheets,.rules,.clear,.vars{grid-template-columns:minmax(0,1fr)}
+  .ladder li{grid-template-columns:minmax(0,1fr);gap:6px}
+  .calc .row{grid-template-columns:minmax(0,1fr)}
+  section.band{padding-block:40px}
+  table.proto{min-width:0}
+  table.proto thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  table.proto tr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;padding-block:16px;border-bottom:1px solid var(--rule)}
+  table.proto td{display:block;padding:0;border:0;width:auto}
+  table.proto td:nth-child(3),table.proto td.what,table.proto td.from{grid-column:1/-1}
+  table.proto td:nth-child(6){grid-row:1;grid-column:3}
+  table.proto td:nth-child(3)::before{content:"Who · ";color:var(--soft)}
+  table.proto td.from::before{content:"From LTP · "}
+}
+@media (prefers-reduced-motion:reduce){
+  .ring-orbit,.ember,.flow{animation:none}
+  .paper{transition:none}
+}
+</style>
+
+<div class="wrap">
+<header class="hero">
+  <div class="copy">
+    <div class="word" aria-label="YV Group"><b>YV</b><span>GROUP</span></div>
+    <h1>Organisation chart</h1>
+    <p class="lede">We take brands into residence and go to market with them. <strong>Every brand is held in one Partner's portfolio</strong>, and that Partner is the brand's own person at YV, season after season.</p>
+    <div class="status">
+      <span class="pill">Draft 0.1 · 21 Nov 2026</span>
+      <span class="pill warm">Protocols await clearance</span>
+    </div>
+  </div>
+  <svg viewBox="0 0 612 440" role="img" aria-labelledby="ladder-t">
+    <title id="ladder-t">One ladder: Contractor, Partner, Managing Partner, General Managing Partner. Brands sit in the Partner's portfolio.</title>
+    <defs>
+      <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0" stop-color="rgb(255 168 88)" stop-opacity=".38"/>
+        <stop offset="1" stop-color="rgb(255 168 88)" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <ellipse cx="496" cy="262" rx="140" ry="110" fill="url(#halo)" class="ember"/>
+    <g fill="none" stroke="rgb(255 168 88)" stroke-width="2" stroke-linecap="round">
+      <path class="flow" d="M170 330 C170 312 250 312 250 296"/>
+      <path class="flow" d="M250 230 C250 212 330 212 330 196"/>
+      <path class="flow" d="M330 130 C330 112 410 112 410 96"/>
+      <path class="flow" d="M362 262 C374 262 380 262 390 262"/>
+    </g>
+    <g font-size="15">
+      <g><rect x="306" y="36" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="300" y="30" width="220" height="62" rx="3" fill="#f1ece2"/>
+        <text x="316" y="54" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 4</text><text x="316" y="78" fill="#191714" font-weight="600">General Managing Partner</text></g>
+      <g><rect x="226" y="136" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="220" y="130" width="220" height="62" rx="3" fill="#f1ece2"/>
+        <text x="236" y="154" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 3</text><text x="236" y="178" fill="#191714" font-weight="600">Managing Partner</text></g>
+      <g><rect x="146" y="236" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="140" y="230" width="220" height="62" rx="3" fill="#f1ece2"/>
+        <text x="156" y="254" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 2</text><text x="156" y="278" fill="#191714" font-weight="600">Partner</text></g>
+      <g><rect x="66" y="336" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="60" y="330" width="220" height="62" rx="3" fill="#f1ece2"/>
+        <text x="76" y="354" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 1</text><text x="76" y="378" fill="#191714" font-weight="600">Contractor</text></g>
+    </g>
+    <g font-size="12" fill="#191714">
+      <g transform="rotate(-6 426 261)"><rect x="394" y="232" width="64" height="58" rx="3" fill="#e6dfd2" stroke="#191714" stroke-opacity=".15"/><text x="426" y="265" text-anchor="middle" font-weight="600">Brand</text></g>
+      <g transform="rotate(1 496 259)"><rect x="464" y="230" width="64" height="58" rx="3" fill="#ece6da" stroke="#191714" stroke-opacity=".15"/><text x="496" y="263" text-anchor="middle" font-weight="600">Brand</text></g>
+      <g transform="rotate(6 566 263)"><rect x="534" y="234" width="64" height="58" rx="3" fill="#f1ece2" stroke="#191714" stroke-opacity=".15"/><text x="566" y="267" text-anchor="middle" font-weight="600">Brand</text></g>
+    </g>
+    <text x="496" y="326" text-anchor="middle" font-size="11" letter-spacing="1.8" fill="rgb(243 239 231 / .72)">THE PORTFOLIO</text>
+  </svg>
+</header>
+
+<section class="band" id="ladder">
+  <div class="head">
+    <span class="label">Part A · One ladder</span>
+    <h2>From Contractor to General Managing Partner</h2>
+    <p>Everyone starts as a contractor and earns the Partner Share on their brands from the day they sign. Above Partner, the ladder is the same as LTP's.</p>
+  </div>
+  <ol class="ladder" reversed>
+    <li><span class="label t">Tier 4</span><div><h3>General Managing Partner</h3><p class="how">Appointed from the Managing Partners. Runs the office, sets the variables, approves spend under V-13.</p></div><p class="pay"><span class="label">Pay</span>Office share (V-06) of the office's Fee Income; other pay V-05.</p></li>
+    <li><span class="label t">Tier 3</span><div><h3>Managing Partner</h3><p class="how">Partner KPIs met for consecutive quarters (V-04), a market plan defended, elevated by the GMP. Manages new contractors and contracts; assigns brands.</p></div><p class="pay"><span class="label">Pay</span>Own Partner Share on own brands; override V-15, if any.</p></li>
+    <li><span class="label t">Tier 2</span><div><h3>Partner</h3><p class="how">Six months after signing, one YV share bought, advancement review passed.</p></div><p class="pay"><span class="label">Pay</span>The 25% Partner Share on each brand they source or hold.</p></li>
+    <li><span class="label t">Tier 1</span><div><h3>Contractor</h3><p class="how">40 hours of training (20 at gatherings, 20 on a live season beside a Partner), then the Partner Agreement is signed.</p></div><p class="pay"><span class="label">Pay</span>The 25% Partner Share from day one. No salary.</p></li>
+  </ol>
+  <p class="gone">Not at YV: <s>Employee Track</s>, <s>Real Estate Photographer Track</s>, <s>Reception</s>, <s>Customer Support &amp; Concierge</s>. Partners are the brand's reception: the founder speaks to their Custodian, not to a desk.</p>
+</section>
+
+<section class="band" id="roles">
+  <div class="head">
+    <span class="label">A3 · Brands in residence</span>
+    <h2>Three roles on a brand</h2>
+    <p>The founder owns the brand. The residency is YV's mandate, under the Residency Agreement, to take that brand to market with its people, seasons and gatherings. Each residency sits in exactly one Custodian's portfolio.</p>
+  </div>
+  <div class="sheets">
+    <article class="paper"><span class="label">Sourcing Share</span><span class="pct">12.5%</span><h3>Sourcer</h3><p>Brought the brand to YV: introduced the founder and got the Residency Agreement signed.</p></article>
+    <article class="paper"><span class="label">Custodian Share · Support inside</span><span class="pct">12.5%</span><h3>Custodian</h3><p>Holds the brand in their portfolio and is its direct relation at YV. Runs its seasons, cares for the founder, answers its members, handles disputes.</p></article>
+    <article class="paper"><span class="label">Support Share · from the Custodian</span><span class="pct">5%</span><h3>Support</h3><p>Anyone assigned to help on the brand's seasons, such as a gathering host, a creator or a producer. Default 5%; the Custodian may agree 0% to 12.5% in writing.</p></article>
+  </div>
+</section>
+
+<section class="band" id="share">
+  <div class="split">
+    <div>
+      <div class="head">
+        <span class="label">A4 · Same split as LTP</span>
+        <h2>The 25% Partner Share</h2>
+        <p>Paid on Fee Income: the residency fee, season fees and any success fee YV actually receives for a brand. Never on the brand's own sales. Equity a brand grants YV waits on V-16.</p>
+      </div>
+      <table class="split-table">
+        <thead><tr><th class="label">Share</th><th class="label">Of Fee Income</th><th class="label">Goes to</th></tr></thead>
+        <tbody>
+          <tr><td>Sourcing Share</td><td>12.5%</td><td>Sourcer</td></tr>
+          <tr><td>Custodian Share</td><td>12.5%</td><td>Custodian</td></tr>
+          <tr class="in"><td>Support Share, inside it</td><td>5% default</td><td>Support, otherwise the Custodian</td></tr>
+          <tr class="sum"><td>Total</td><td>25%</td><td></td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:16px">Credited at the weekly consolidation (V-12) to each Portfolio Account, with a statement. Withdrawn on Fridays.</p>
+    </div>
+    <form class="card calc" id="calc" aria-labelledby="calc-t">
+      <h3 id="calc-t">Try one brand's week</h3>
+      <label for="fee"><span class="label">Fee Income received this week</span><input id="fee" type="number" min="0" step="100" value="10000" inputmode="decimal"></label>
+      <label class="chk" for="same"><input id="same" type="checkbox"> Sourcer is also the Custodian</label>
+      <div class="row">
+        <label class="chk" for="sup"><input id="sup" type="checkbox" checked> Support assigned</label>
+        <label for="pct"><span class="label">Support Share %</span><input id="pct" type="number" min="0" max="12.5" step="0.5" value="5"></label>
+      </div>
+      <div class="out" id="out" aria-live="polite"></div>
+      <p class="note">Example figures in any currency. Shares are worked to the cent before rounding for display.</p>
+    </form>
+  </div>
+</section>
+
+<section class="band" id="season">
+  <div class="head">
+    <span class="label">P1 · New · proposed</span>
+    <h2>The Season</h2>
+    <p>We don't just go to market. Each season the Custodian runs one pass of these seven steps with the brand, and each pass starts larger than the last: more people, more frequent story beats, more that early members have earned.</p>
+  </div>
+  <div class="season">
+    <svg viewBox="0 0 360 360" role="img" aria-labelledby="season-t">
+      <title id="season-t">Three seasons as widening rings. Seven steps sit on each ring; each season starts larger than the one before.</title>
+      <defs>
+        <radialGradient id="fire" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="rgb(255 222 170)" stop-opacity=".9"/>
+          <stop offset=".35" stop-color="rgb(255 168 88)" stop-opacity=".45"/>
+          <stop offset="1" stop-color="rgb(255 168 88)" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="180" cy="180" r="44" fill="url(#fire)" class="ember"/>
+      <g fill="none" stroke="rgb(255 236 214 / .22)">
+        <circle cx="180" cy="180" r="70"/>
+        <circle cx="180" cy="180" r="108"/>
+        <circle cx="180" cy="180" r="146" stroke="rgb(255 168 88 / .55)"/>
+      </g>
+      <g font-size="10" letter-spacing="1.4" fill="rgb(243 239 231 / .74)" text-anchor="middle">
+        <text x="180" y="117">SEASON 1</text>
+        <text x="180" y="79">SEASON 2</text>
+        <text x="180" y="41">SEASON 3</text>
+      </g>
+      <g class="ring-orbit"><circle cx="326" cy="180" r="5" fill="rgb(255 222 170)"/><circle cx="326" cy="180" r="11" fill="rgb(255 168 88)" opacity=".3"/></g>
+      <g font-size="12" font-weight="600" text-anchor="middle">
+        <g><circle cx="243.4" cy="48.5" r="13" fill="#f1ece2"/><text x="243.4" y="52.5" fill="#191714">1</text></g>
+        <g><circle cx="322.3" cy="147.5" r="13" fill="#f1ece2"/><text x="322.3" y="151.5" fill="#191714">2</text></g>
+        <g><circle cx="294.2" cy="271" r="13" fill="#f1ece2"/><text x="294.2" y="275" fill="#191714">3</text></g>
+        <g><circle cx="180" cy="326" r="13" fill="#f1ece2"/><text x="180" y="330" fill="#191714">4</text></g>
+        <g><circle cx="65.8" cy="271" r="13" fill="#f1ece2"/><text x="65.8" y="275" fill="#191714">5</text></g>
+        <g><circle cx="37.7" cy="147.5" r="13" fill="#f1ece2"/><text x="37.7" y="151.5" fill="#191714">6</text></g>
+        <g><circle cx="116.6" cy="48.5" r="13" fill="#f1ece2"/><text x="116.6" y="52.5" fill="#191714">7</text></g>
+      </g>
+    </svg>
+    <ol class="steps">
+      <li><div><b>Warm circle.</b> <p>The first early-access people come from warm connections, the brand's and ours.</p></div></li>
+      <li><div><b>Focus group.</b> <p>They use the product and are heard. What they find becomes case studies, published only with the brand's consent.</p></div></li>
+      <li><div><b>Gathering.</b> <p>Communal gatherings with the focus group. The brand's strategic narrative and its branching storylines are taken from what happens there.</p></div></li>
+      <li><div><b>Story beat.</b> <p>One movement story beat, built from those storylines, that gets people moving to join early access.</p></div></li>
+      <li><div><b>Early access.</b> <p>The program opens and the first loyal customers join. Focus-group members get early-bird benefits.</p></div></li>
+      <li><div><b>Badges and perks.</b> <p>Commemorative badges and perks reward active participation, and compound as each new capability is added.</p></div></li>
+      <li><div><b>Season close.</b> <p>The Custodian and the founder read what grew and set the next season's scale.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="band" id="protocols">
+  <div class="head">
+    <span class="label">Part B · Proposed</span>
+    <h2>Protocols, from LTP's to YV's</h2>
+    <p>Each LTP protocol is kept, adapted for brands, or removed with the desk and the photo line. Three are new, because LTP never had to turn customers into members.</p>
+  </div>
+  <div class="scroll">
+    <table class="proto">
+      <thead><tr><th class="label">P</th><th class="label">Protocol</th><th class="label">Who</th><th class="label">What it says</th><th class="label">From LTP</th><th class="label">Change</th></tr></thead>
+      <tbody>
+        <tr><td class="code">P1</td><td class="name">The Season</td><td>Custodian, with the brand</td><td class="what">Seven steps a season, each season larger. Length and seasons a year: V-08.</td><td class="from">—</td><td><span class="chip new">New</span></td></tr>
+        <tr><td class="code">P2</td><td class="name">Members and badges</td><td>Custodian; YV keeps the ledger</td><td class="what">Everyone who joins is recorded with the season they joined. A badge is never taken back. Perks are the brand's, written into the season plan, and carry into every later season.</td><td class="from">—</td><td><span class="chip new">New</span></td></tr>
+        <tr><td class="code">P3</td><td class="name">Duty of care</td><td>Custodian</td><td class="what">The brand's direct relation. A group of the founder, the official YV account and the Custodian, opened within V-09 days; the founder answered within V-10 hours; a check-in every week of a season.</td><td class="from">B-02 + desk</td><td><span class="chip new">New</span></td></tr>
+        <tr><td class="code">P4</td><td class="name">Intake and Brand Packet</td><td>Sourcer</td><td class="what">Signed Residency Agreement, the brand story as the founder tells it, product state, what the first season should reach, marks and assets, known limits. Incomplete packets do not start.</td><td class="from">B-01</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P5</td><td class="name">Brand and member concerns</td><td>Custodian</td><td class="what">Come straight to the Custodian, who answers, decides, carries it out or assigns it, and records it closed. No Custodian: YV handles it.</td><td class="from">B-05</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P6</td><td class="name">Disputes and stakeholder relations</td><td>Custodian</td><td class="what">Unresolved after V-11 days goes to a Managing Partner or the GMP.</td><td class="from">B-06</td><td><span class="chip kept">Kept</span></td></tr>
+        <tr><td class="code">P7</td><td class="name">Gatherings: vendors and invoicing</td><td>Custodian; YV invoices</td><td class="what">The Custodian books venues, production, food and printing the season plan calls for. Spend marked by V-13 waits for the GMP.</td><td class="from">B-19</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P8</td><td class="name">Consolidation, statements, withdrawals</td><td>YV: the GMP or whom the GMP names</td><td class="what">Weekly credit and statement; Friday withdrawals, now processed without a concierge.</td><td class="from">B-15</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P9</td><td class="name">Training before signing</td><td>Managing Partner</td><td class="what">40 hours: 20 at gatherings, 20 on a live season beside a Partner.</td><td class="from">B-08</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P10</td><td class="name">Friday meeting</td><td>Everyone</td><td class="what">Open, not compulsory: everyone at YV is a contractor, and required attendance can make a contractor look like an employee.</td><td class="from">B-07</td><td><span class="chip adapted">Adapted</span></td></tr>
+        <tr><td class="code">P11–P18</td><td class="name">Titles, conduct, Formal Notices, warnings, advancement review, share offer, leaving, changing protocols</td><td>As named</td><td class="what">LTP's B-09 to B-17 with YV for LTP and Tier 3 for Tier 5. KPI targets (V-01) are read from season outcomes.</td><td class="from">B-09 – B-17</td><td><span class="chip kept">Kept</span></td></tr>
+        <tr class="removed"><td class="code">—</td><td class="name">Property video</td><td>—</td><td class="what">Sent to reception; there is no reception.</td><td class="from">B-03</td><td><span class="chip removed">Removed</span></td></tr>
+        <tr class="removed"><td class="code">—</td><td class="name">Photo maintenance</td><td>—</td><td class="what">There is no photo line.</td><td class="from">B-04</td><td><span class="chip removed">Removed</span></td></tr>
+        <tr class="removed"><td class="code">—</td><td class="name">Bookings and the Reception Booking Commission</td><td>—</td><td class="what">Desk work; the Custodian is the brand's reception.</td><td class="from">B-18, A2.6</td><td><span class="chip removed">Removed</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="band" id="clearance">
+  <div class="head">
+    <span class="label">Part F · For Seonso</span>
+    <h2>Where LTP's protocols break, and what we propose</h2>
+    <p>Eight points to clear. Each is written into the chart above as proposed; a cleared point becomes the chart.</p>
+  </div>
+  <div class="clear">
+    <article class="paper"><span class="n">C1</span><h3>The early-access loop has no LTP counterpart</h3><p class="prop"><b>Proposed:</b> P1 in seven steps, one season is one pass; P2 keeps the members between seasons.</p></article>
+    <article class="paper"><span class="n">C2</span><h3>Desk duties have no desk</h3><p class="prop"><b>Proposed:</b> founder requests (P3), concerns (P5) and gathering vendors (P7) go to the Custodian. Statements and withdrawals go to YV (P8).</p></article>
+    <article class="paper"><span class="n">C3</span><h3>Desk and photo protocols</h3><p class="prop"><b>Proposed:</b> remove B-03, B-04, B-18, the office (A2.5) and the Reception Booking Commission (A2.6).</p></article>
+    <article class="paper"><span class="n">C4</span><h3>The Support Share was the photographer's</h3><p class="prop"><b>Proposed:</b> keep it at 5% default inside the Custodian Share, for whoever is assigned as Support.</p></article>
+    <article class="paper"><span class="n">C5</span><h3>Fee Income said "never rent"</h3><p class="prop"><b>Proposed:</b> residency, season and success fees received; never the brand's sales. Equity a brand grants YV: set later as V-16.</p></article>
+    <article class="paper"><span class="n">C6</span><h3>Who gives and keeps the perks</h3><p class="prop"><b>Proposed:</b> perks are the brand's, written into the season plan. Badges are never taken back. YV keeps the member ledger.</p></article>
+    <article class="paper"><span class="n">C7</span><h3>A Friday meeting of contractors</h3><p class="prop"><b>Proposed:</b> open to all, not compulsory.</p></article>
+    <article class="paper"><span class="n">C8</span><h3>Ladder and shares</h3><p class="prop"><b>Proposed:</b> a Partner holds a YV share, as at LTP. Tiers numbered 1 to 4, since there is no employee ladder below.</p></article>
+  </div>
+</section>
+
+<section class="band" id="rules">
+  <div class="head">
+    <span class="label">Part C</span>
+    <h2>Rules for everyone</h2>
+  </div>
+  <div class="rules">
+    <div class="rule"><span class="label">During and 3 years after</span><h3>Confidentiality</h3><p>Brand plans, founder conversations, member lists, pricing, systems, financials and partnership terms.</p></div>
+    <div class="rule"><span class="label">During and 2 years after</span><h3>No competing</h3><p>No work for a business competing directly with YV's brand residencies, in the markets V-17 names.</p></div>
+    <div class="rule"><span class="label">During and 2 years after</span><h3>No poaching</h3><p>No taking YV brands or members to a competitor, and no recruiting YV people.</p></div>
+    <div class="rule"><span class="label">From the day made</span><h3>Work product</h3><p>Story materials, case studies and the member ledger belong to YV. The brand's name, marks and product stay the brand's.</p></div>
+  </div>
+</section>
+
+<section class="band" id="variables">
+  <div class="head">
+    <span class="label">Part D · Set by the GMP in writing</span>
+    <h2>Variables</h2>
+    <p>None set yet. A step that depends on an unset variable does not take effect.</p>
+  </div>
+  <ul class="vars">
+    <li><span>V-00</span><span>Effective date of this version</span></li>
+    <li><span>V-01</span><span>Partner KPI targets, read from season outcomes</span></li>
+    <li><span>V-02</span><span>Share value and discounts</span></li>
+    <li><span>V-03</span><span>Share lock-up, months</span></li>
+    <li><span>V-04</span><span>Managing Partner elevation thresholds</span></li>
+    <li><span>V-05</span><span>GMP criteria and pay</span></li>
+    <li><span>V-06</span><span>GMP office share, % of Fee Income</span></li>
+    <li><span>V-07</span><span>Partner base pay (none unless set)</span></li>
+    <li><span>V-08</span><span>Season length and seasons a year</span></li>
+    <li><span>V-09</span><span>Days to open the brand group</span></li>
+    <li><span>V-10</span><span>Hours to answer the founder</span></li>
+    <li><span>V-11</span><span>Days before a dispute goes up</span></li>
+    <li><span>V-12</span><span>Weekly consolidation cut-off</span></li>
+    <li><span>V-13</span><span>Spend and withdrawals needing GMP approval</span></li>
+    <li><span>V-14</span><span>Share buy-back price</span></li>
+    <li><span>V-15</span><span>Managing Partner override</span></li>
+    <li><span>V-16</span><span>Equity a brand grants YV: Partner Share treatment</span></li>
+    <li><span>V-17</span><span>Markets under the no-competing rule</span></li>
+  </ul>
+</section>
+
+<footer>
+  <span>YV Group · Organisation chart, draft 0.1, 21 November 2026.</span>
+  <span>Made from the LTP Organisation Chart v1.0. The written source is <code>org-chart/ORG-CHART.md</code> in the YV repository.</span>
+</footer>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const fee = $('fee'), same = $('same'), sup = $('sup'), pct = $('pct'), out = $('out');
+  const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const line = (label, value, cls) => `<div${cls ? ` class="${cls}"` : ''}><span>${label}</span><span>${fmt(value)}</span></div>`;
+
+  function render() {
+    const income = Math.max(0, Number(fee.value) || 0);
+    const supportPct = sup.checked ? Math.min(12.5, Math.max(0, Number(pct.value) || 0)) : 0;
+    pct.disabled = !sup.checked;
+    const sourcing = income * 0.125;
+    const custodianShare = income * 0.125;
+    const support = income * supportPct / 100;
+    const custodian = custodianShare - support;
+    const rows = same.checked
+      ? [line('Sourcer and Custodian, one person', sourcing + custodian)]
+      : [line('Sourcer · 12.5%', sourcing), line(`Custodian · 12.5%${support ? ` less Support` : ''}`, custodian)];
+    if (support) rows.push(line(`Support · ${supportPct}%`, support));
+    rows.push(line('Partner Share · 25%', sourcing + custodianShare, 'tot'));
+    rows.push(line('YV keeps · 75%', income * 0.75, 'yv'));
+    out.innerHTML = rows.join('');
+  }
+  $('calc').addEventListener('input', render);
+  $('calc').addEventListener('submit', (e) => e.preventDefault());
+  render();
+})();
+</script>
