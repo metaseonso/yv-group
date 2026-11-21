@@ -2,442 +2,677 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=EB+Garamond:ital@0;1&display=swap">
 <style>
-/* Layout: a night page of cut paper. Sections are sheets on the dark; the warm glow marks only where people or money move.
-   Single dark look by choice: YV's own tokens (src/styles/site.css). */
+/* Layout: the LTP Organisation Chart's system (isometric scenes beside plain text, panels split by dashed rules, mono tags as labels),
+   on a black ground. Black-and-white interface; YV's warm glow (amber, pale gold) only on the diagram objects, where LTP uses its green and pink. */
 :root{
   color-scheme:dark;
-  --night:#050506; --sheet:#0e0d11; --sheet-2:#16151a;
-  --rule:rgb(255 236 214 / .14);
-  --paper:#f1ece2; --paper-ink:#191714; --paper-soft:#5a544b;
-  --text:#f3efe7; --soft:rgb(243 239 231 / .72);
-  --glow:255 168 88; --glow-pale:255 222 170;
-  --font:"Literata","Iowan Old Style","Palatino Linotype",Georgia,serif;
-  --fs-label:.78rem; --fs-body:1.0625rem; --fs-h3:1.3rem;
-  --fs-h2:clamp(1.6rem,1.1rem + 1.8vw,2.4rem); --fs-h1:clamp(2.4rem,1.4rem + 4.2vw,4.6rem);
+  --ground:#050506; --panel:#0f0f11; --ink:#f4f2ee; --ink2:#a9a6a0; --rule:#2c2b2e; --tag:#050506;
+  --accent:#f4f2ee; --on-accent:#050506;
+  --hi:#ffa858; --on-hi:#1a0e03;
+  --g1:#2a1a0b; --g2:#6e4318; --g3:#4a2d10; --ge:#ffa858;
+  --p1:#262119; --p2:#6b5d45; --p3:#463d2e; --pe:#f1d9a8;
+  --n1:#161618; --n2:#3a3a3e; --n3:#26262a; --ne:#8d8a85;
+  --flow:#ffa858; --dot:#ffdeaa; --tipbg:#f4f2ee; --tipfg:#050506;
+  --display:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --serif:"EB Garamond",Garamond,"Times New Roman",serif;
 }
 *{box-sizing:border-box}
-body{background:var(--night);color:var(--text);font-family:var(--font);font-size:var(--fs-body);line-height:1.55;-webkit-font-smoothing:antialiased;font-optical-sizing:auto}
+body{background:var(--ground);color:var(--ink);font-family:var(--display);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
 .wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-weight:500;margin:0;text-wrap:balance;letter-spacing:-.01em}
-h1{font-size:var(--fs-h1);line-height:1.02}
-h2{font-size:var(--fs-h2);line-height:1.12}
-h3{font-size:var(--fs-h3);line-height:1.2}
+.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;font-size:12px}
+h1,h2,h3{font-weight:500;letter-spacing:-.02em;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6vw,64px);line-height:1.02}
+h2{font-size:clamp(24px,3vw,32px);line-height:1.15}
+h3{font-size:22px;line-height:1.2}
 p{margin:0}
-.label{font-size:var(--fs-label);letter-spacing:.14em;text-transform:uppercase;color:var(--soft);font-variant-numeric:tabular-nums}
-.glow{color:rgb(var(--glow-pale))}
-:focus-visible{outline:2px solid rgb(var(--glow-pale));outline-offset:3px}
+.mark{background:var(--accent);color:var(--on-accent);padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.wordmark{display:flex;align-items:baseline;gap:.55em;margin-bottom:.3em;font-family:var(--display);font-weight:600;font-size:.42em;letter-spacing:.04em}
+.wordmark span{font-family:var(--mono);font-weight:500;font-size:.42em;letter-spacing:.4em;color:var(--ink2)}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border:1px solid var(--rule);background:var(--tag);color:var(--ink);text-decoration:none;font-weight:500;cursor:pointer}
+.btn.solid{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn:focus-visible,.hot:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.btn span{font-size:14px}
 
-/* Hero */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:center;padding-block:56px 40px;border-bottom:1px solid var(--rule)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:24px;align-items:center;padding-block:48px 24px;border-bottom:1px dashed var(--rule)}
 .hero .copy{display:grid;gap:22px;min-width:0}
-.word{display:flex;align-items:baseline;gap:.5em;font-weight:600}
-.word b{font-size:2.2rem;letter-spacing:.06em;font-weight:600}
-.word span{font-size:.9rem;letter-spacing:.42em;color:var(--soft)}
-.lede{font-size:1.2rem;max-width:38ch;color:var(--soft)}
-.lede strong{color:var(--text);font-weight:500}
-.status{display:flex;gap:10px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--rule);border-radius:999px;font-size:var(--fs-label);letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
-.pill.warm{border-color:rgb(var(--glow) / .5);color:rgb(var(--glow-pale))}
-.pill.warm::before{content:"";width:7px;height:7px;border-radius:50%;background:rgb(var(--glow));box-shadow:0 0 10px rgb(var(--glow))}
-svg{display:block;width:100%;height:auto;overflow:visible}
-svg text{font-family:var(--font)}
+.hero .lede{font-size:18px;max-width:36ch}
+.hero .row{display:flex;gap:12px;flex-wrap:wrap}
+.hero .meta{color:var(--ink2)}
+svg.scene{width:100%;height:auto;display:block;overflow:visible}
 
-/* Sections */
-section.band{padding-block:56px;border-bottom:1px solid var(--rule)}
-.head{display:grid;gap:10px;max-width:64ch;margin-bottom:28px}
-.head p{color:var(--soft)}
-.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:36px;align-items:start}
+.panels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px dashed var(--rule)}
+.panel{padding-block:40px 24px;padding-inline:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel:first-child{padding-left:0}
+.panel:last-child{padding-right:0}
+.panel+.panel{border-left:1px dashed var(--rule)}
+.panel p.d{max-width:40ch}
+.tiers{list-style:none;margin:8px 0 0;padding:0;border-top:1px dashed var(--rule)}
+.tiers li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px dashed var(--rule)}
+.tiers li b{font-weight:500}
+.tiers li .mono{color:var(--ink2);font-size:11px;text-align:right}
+.panel svg{margin-top:auto}
 
-/* Ladder */
-.ladder{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule)}
-.ladder li{display:grid;grid-template-columns:5.5rem minmax(0,1fr) minmax(0,1.1fr);gap:20px;padding-block:20px;border-bottom:1px solid var(--rule);align-items:start}
-.ladder .t{font-variant-numeric:tabular-nums}
-.ladder h3{margin-bottom:4px}
-.ladder .how{color:var(--soft);font-size:.98rem}
-.ladder .pay{font-size:.98rem}
-.ladder .pay .label{display:block;margin-bottom:2px}
-.gone{margin-top:18px;color:var(--soft);font-size:.95rem;max-width:70ch}
-.gone s{color:rgb(243 239 231 / .62)}
-
-/* Paper sheets (roles, clearance) */
-.sheets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.paper{background:var(--paper);color:var(--paper-ink);padding:22px;border-radius:3px;display:grid;gap:10px;align-content:start;box-shadow:6px 6px 0 rgb(0 0 0 / .55),0 0 0 1px rgb(255 255 255 / .04);transform-origin:50% 100%;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-.paper .label{color:var(--paper-soft)}
-.paper p{color:var(--paper-ink)}
-.paper .pct{font-size:2.4rem;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
-@media (hover:hover){.paper:hover{transform:translateY(-4px) rotate(-.4deg)}}
-
-/* Calculator */
-.card{background:var(--sheet);border:1px solid var(--rule);border-radius:4px;padding:22px;display:grid;gap:16px;min-width:0}
+section.band{padding-block:56px;border-bottom:1px dashed var(--rule)}
+.head{display:grid;gap:10px;max-width:62ch;margin-bottom:28px}
+.head .mono{color:var(--ink2)}
+.head p{color:var(--ink2)}
+.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--rule);padding:20px;display:grid;gap:14px;min-width:0}
 .calc label{display:grid;gap:6px}
-.calc input[type=number]{font:500 1.15rem var(--font);font-variant-numeric:tabular-nums;padding:10px 12px;min-height:44px;border:1px solid var(--rule);border-radius:3px;background:var(--sheet-2);color:var(--text);width:100%}
-.calc .chk{display:flex;gap:12px;align-items:center;min-height:44px;cursor:pointer}
-.calc .chk input{width:20px;height:20px;accent-color:rgb(var(--glow))}
-.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.out{display:grid;border-top:1px solid var(--rule)}
-.out div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule);font-variant-numeric:tabular-nums}
-.out div span:last-child{font-weight:600}
-.out .tot span:last-child{color:rgb(var(--glow-pale))}
-.out .yv{color:var(--soft)}
-.note{color:var(--soft);font-size:.92rem}
-.split-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-.split-table th,.split-table td{text-align:left;padding:12px 8px 12px 0;border-bottom:1px solid var(--rule);vertical-align:top}
-.split-table th{font-weight:400}
-.split-table td:nth-child(2){white-space:nowrap}
-.split-table tr.in td:first-child{padding-left:18px;color:var(--soft)}
-.split-table tr.sum td{font-weight:600;border-bottom:0}
+.calc input[type=number]{font:500 18px var(--mono);padding:10px 12px;min-height:44px;border:1px solid var(--rule);background:var(--tag);color:var(--ink);width:100%}
+.calc .chk{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer}
+.calc .chk input{width:18px;height:18px;accent-color:var(--hi)}
+.calc .mono{color:var(--ink2)}
+.out{display:grid;border-top:1px dashed var(--rule)}
+.out div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--rule);font-variant-numeric:tabular-nums}
+.out div span:last-child{font-family:var(--mono);font-weight:500}
+.out .tot{font-weight:600}
+.out .yv{color:var(--ink2)}
+.note{color:var(--ink2);font-size:13.5px}
 
-/* Season */
-.season{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:center}
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
-.steps li{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:14px;padding-block:14px;border-bottom:1px solid var(--rule);counter-increment:s}
-.steps li::before{content:counter(s);display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;border:1px solid rgb(var(--glow) / .55);color:rgb(var(--glow-pale));font-variant-numeric:tabular-nums;font-size:.95rem}
-.steps b{font-weight:600}
-.steps p{color:var(--soft);font-size:.98rem}
-.ring-orbit{transform-origin:180px 180px;animation:orbit 18s linear infinite}
-.ember{animation:breathe 3.2s ease-in-out infinite}
-.flow{stroke-dasharray:4 9;animation:flow 2.4s linear infinite}
-@keyframes orbit{to{transform:rotate(360deg)}}
-@keyframes breathe{50%{opacity:.45}}
-@keyframes flow{to{stroke-dashoffset:-26}}
+.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.role{border-top:2px solid var(--ink);padding-top:14px;display:grid;gap:8px;align-content:start}
+.role .mono{color:var(--ink2)}
+.role p{color:var(--ink2)}
+.roles.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.clear{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:28px}
+.clear .role h3{font-size:18px}
+.clear .role p b{color:var(--ink);font-weight:500}
 
-/* Protocol table */
-.scroll{overflow-x:auto}
-table.proto{width:100%;border-collapse:collapse;min-width:760px}
-table.proto th,table.proto td{text-align:left;padding:14px 12px 14px 0;border-bottom:1px solid var(--rule);vertical-align:top}
-table.proto thead th{font-weight:400}
-table.proto td.code{font-variant-numeric:tabular-nums;white-space:nowrap;color:rgb(var(--glow-pale))}
-table.proto td.what{color:var(--soft)}
-table.proto th:nth-child(1){width:7%}table.proto th:nth-child(2){width:17%}table.proto th:nth-child(3){width:16%}table.proto th:nth-child(4){width:40%}table.proto th:nth-child(5){width:10%}
-table.proto td.from{white-space:nowrap;color:var(--soft);font-variant-numeric:tabular-nums}
-table.proto tr.removed td{color:rgb(243 239 231 / .62)}
-table.proto tr.removed td.name{text-decoration:line-through}
-.chip{display:inline-block;padding:6px 12px;border-radius:999px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;border:1px solid var(--rule)}
-.chip.new{background:rgb(var(--glow));color:#1a0e03;border-color:transparent}
-.chip.adapted{border-color:rgb(var(--glow) / .6);color:rgb(var(--glow-pale))}
-.chip.kept{color:var(--soft)}
-.chip.removed{color:rgb(243 239 231 / .62);border-style:dashed}
+.tbl{overflow-x:auto;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px dashed var(--rule);vertical-align:top}
+th{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+tr:last-child td{border-bottom:0}
+td.c{font-family:var(--mono);font-size:12px;white-space:nowrap}
+tr.gone td{color:var(--ink2)}
+tr.gone td.t{text-decoration:line-through}
+.k{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink2);color:var(--ink);padding:3px 7px;white-space:nowrap}
+.k.new{background:var(--hi);color:var(--on-hi);border-color:var(--hi)}
+.k.gone{border-style:dashed;color:var(--ink2)}
 
-/* Clearance */
-.clear{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-.clear .paper{grid-template-columns:auto minmax(0,1fr);column-gap:16px}
-.clear .paper .n{grid-row:span 3;font-size:1.6rem;font-weight:600;font-variant-numeric:tabular-nums;color:#a3392f;line-height:1}
-.clear .paper h3{font-size:1.1rem}
-.clear .paper .prop{border-top:1px dashed rgb(25 23 20 / .25);padding-top:10px}
-.clear .paper .prop b{font-weight:600}
+.steps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin-top:28px}
+.step{position:relative;padding:16px 14px 16px 0;display:grid;gap:6px;align-content:start}
+.step .k{justify-self:start;background:var(--ground);position:relative;z-index:1}
+.step:last-child .k{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.step::after{content:"";position:absolute;left:0;right:0;top:28px;border-top:1px dashed var(--flow)}
+.step b{font-weight:500}
+.step p{font-size:13.5px;color:var(--ink2)}
 
-/* Rules + variables */
-.rules{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
-.rule{border-top:1px solid rgb(var(--glow) / .5);padding-top:14px;display:grid;gap:8px;align-content:start}
-.rule p{color:var(--soft);font-size:.98rem}
-.vars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 28px;list-style:none;margin:0;padding:0}
-.vars li{display:grid;grid-template-columns:3.6rem minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:.95rem}
-.vars li span:first-child{color:rgb(var(--glow-pale));font-variant-numeric:tabular-nums}
-.vars li span:last-child{color:var(--soft)}
-footer{padding-block:32px 48px;color:var(--soft);font-size:.9rem;display:grid;gap:6px}
+.v{font-family:var(--mono);font-size:.86em;background:var(--panel);border:1px solid var(--ink2);padding:0 4px;white-space:nowrap}
+.vars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px}
+.vars div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px dashed var(--rule);font-size:14px}
+.vars div span:first-child{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+footer{padding-block:28px 40px;color:var(--ink2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* hover descriptions */
+.hot{cursor:pointer;outline:none}
+.hot:hover polygon,.hot:hover ellipse,.hot:hover path:not(.flow),.hot:hover rect,.hot:focus-visible rect{stroke-width:1.8}
+#tip{position:fixed;z-index:50;max-width:280px;background:var(--tipbg);color:var(--tipfg);padding:10px 12px;font-size:13px;line-height:1.45;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s}
+#tip.on{opacity:1;transform:none}
+#tip b{display:block;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+#tip .nx{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.75}
+
+/* extruded boxes */
+.xb{transition:transform .25s ease;transform-box:fill-box}
+.hot:hover .xb,.hot:focus-visible .xb,.xb.on{transform:translateY(-5px)}
+.xb.on .top{fill:var(--hi)}
+.hot{transition:transform .25s ease;transform-box:fill-box}
+.hot:hover,.hot:focus-visible{transform:translateY(-4px)}
+.hot:hover .xb,.hot:focus-visible .xb{transform:none}
+.pcard{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:24px;border:1px solid var(--rule);background:var(--panel);padding:20px;margin-top:8px}
+.pcard .code{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.pcard h3{font-size:20px;margin-top:4px}
+.pcard .who{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin-top:8px}
+.pcard .from{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pcard .txt{min-width:0;max-width:70ch}
+.pcard .txt ol{margin:6px 0;padding-left:20px}
+.desks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+.desk{border-top:2px solid var(--ink);padding-top:14px;display:grid;gap:8px;align-content:start}
+.desk ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.desk .mono{color:var(--ink2)}
+.scroller{overflow-x:auto}
+.scroller svg{min-width:720px}
+
+.flow{fill:none;stroke:var(--flow);stroke-width:1.3;stroke-dasharray:4 5;animation:dash 1.6s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-18}}
+.float{transform-box:fill-box}
+[hidden]{display:none!important}
+#s-split .stk{transition:transform .8s cubic-bezier(.3,.7,.2,1)}
+#s-split.merged .stk{transform:translateY(116px)}
+#s-split .sep,#s-split .mrg{transition:opacity .45s ease}
+#s-split.merged .sep,#s-split:not(.merged) .mrg{opacity:0;pointer-events:none}
+#s-split.merged .mrg{transition-delay:.6s}
+#s-split .ring{opacity:0;transform-box:fill-box;transform-origin:center}
+#s-split.pulse .ring{animation:ring .9s ease-out .6s 1 both}
+@keyframes ring{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+@media (prefers-reduced-motion:reduce){
+  #s-split .stk,#s-split .sep,#s-split .mrg{transition:none}#s-split.pulse .ring{animation:none}
+  .flow{animation:none}#tip,.xb,.hot{transition:none}
+}
 
 @media (max-width:900px){
-  .hero,.split,.season{grid-template-columns:minmax(0,1fr)}
-  .sheets,.rules{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .vars{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero,.split{grid-template-columns:minmax(0,1fr)}
+  .panels,.roles,.roles.two{grid-template-columns:minmax(0,1fr)}
+  .panel+.panel{border-left:0;border-top:1px dashed var(--rule)}
+  .panel{padding-inline:0}
+  .clear{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:8px}
+  .vars{grid-template-columns:minmax(0,1fr)}
+  .desks,.pcard{grid-template-columns:minmax(0,1fr)}
 }
-@media (max-width:620px){
-  .sheets,.rules,.clear,.vars{grid-template-columns:minmax(0,1fr)}
-  .ladder li{grid-template-columns:minmax(0,1fr);gap:6px}
-  .calc .row{grid-template-columns:minmax(0,1fr)}
-  section.band{padding-block:40px}
-  table.proto{min-width:0}
-  table.proto thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-  table.proto tr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;padding-block:16px;border-bottom:1px solid var(--rule)}
-  table.proto td{display:block;padding:0;border:0;width:auto}
-  table.proto td:nth-child(3),table.proto td.what,table.proto td.from{grid-column:1/-1}
-  table.proto td:nth-child(6){grid-row:1;grid-column:3}
-  table.proto td:nth-child(3)::before{content:"Who · ";color:var(--soft)}
-  table.proto td.from::before{content:"From LTP · "}
-}
-@media (prefers-reduced-motion:reduce){
-  .ring-orbit,.ember,.flow{animation:none}
-  .paper{transition:none}
+@media (max-width:560px){
+  .clear{grid-template-columns:minmax(0,1fr)}
 }
 </style>
 
 <div class="wrap">
 <header class="hero">
   <div class="copy">
-    <div class="word" aria-label="YV Group"><b>YV</b><span>GROUP</span></div>
-    <h1>Organisation chart</h1>
-    <p class="lede">We take brands into residence and go to market with them. <strong>Every brand is held in one Partner's portfolio</strong>, and that Partner is the brand's own person at YV, season after season.</p>
-    <div class="status">
-      <span class="pill">Draft 0.1 · 21 Nov 2026</span>
-      <span class="pill warm">Protocols await clearance</span>
+    <span class="mono meta">YV Group · Brands in residence</span>
+    <h1><span class="wordmark" aria-label="YV Group">YV<span>GROUP</span></span>Organisation <span class="mark">chart</span></h1>
+    <p class="lede">One ladder: Contractor, Partner, Managing Partner, General Managing Partner. Every brand YV takes into residence sits in one Partner's portfolio, and that Partner is the brand's own person at YV. People in each tier are candidates for the next one.</p>
+    <div class="row">
+      <a class="btn solid" href="#ladder">See the ladder <span>›</span></a>
+      <a class="btn" href="#clearance">What changed from LTP <span>›</span></a>
     </div>
+    <span class="mono meta">Version 0.2 · 21 Nov 2026 · Protocols cleared by Seonso</span>
+    <span class="mono meta">Hover over or tap any part of a diagram to see what it is</span>
   </div>
-  <svg viewBox="0 0 612 440" role="img" aria-labelledby="ladder-t">
-    <title id="ladder-t">One ladder: Contractor, Partner, Managing Partner, General Managing Partner. Brands sit in the Partner's portfolio.</title>
-    <defs>
-      <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-        <stop offset="0" stop-color="rgb(255 168 88)" stop-opacity=".38"/>
-        <stop offset="1" stop-color="rgb(255 168 88)" stop-opacity="0"/>
-      </radialGradient>
-    </defs>
-    <ellipse cx="496" cy="262" rx="140" ry="110" fill="url(#halo)" class="ember"/>
-    <g fill="none" stroke="rgb(255 168 88)" stroke-width="2" stroke-linecap="round">
-      <path class="flow" d="M170 330 C170 312 250 312 250 296"/>
-      <path class="flow" d="M250 230 C250 212 330 212 330 196"/>
-      <path class="flow" d="M330 130 C330 112 410 112 410 96"/>
-      <path class="flow" d="M362 262 C374 262 380 262 390 262"/>
-    </g>
-    <g font-size="15">
-      <g><rect x="306" y="36" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="300" y="30" width="220" height="62" rx="3" fill="#f1ece2"/>
-        <text x="316" y="54" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 4</text><text x="316" y="78" fill="#191714" font-weight="600">General Managing Partner</text></g>
-      <g><rect x="226" y="136" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="220" y="130" width="220" height="62" rx="3" fill="#f1ece2"/>
-        <text x="236" y="154" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 3</text><text x="236" y="178" fill="#191714" font-weight="600">Managing Partner</text></g>
-      <g><rect x="146" y="236" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="140" y="230" width="220" height="62" rx="3" fill="#f1ece2"/>
-        <text x="156" y="254" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 2</text><text x="156" y="278" fill="#191714" font-weight="600">Partner</text></g>
-      <g><rect x="66" y="336" width="220" height="62" rx="3" fill="#000" opacity=".55"/><rect x="60" y="330" width="220" height="62" rx="3" fill="#f1ece2"/>
-        <text x="76" y="354" fill="#5a544b" font-size="11" letter-spacing="1.6">TIER 1</text><text x="76" y="378" fill="#191714" font-weight="600">Contractor</text></g>
-    </g>
-    <g font-size="12" fill="#191714">
-      <g transform="rotate(-6 426 261)"><rect x="394" y="232" width="64" height="58" rx="3" fill="#e6dfd2" stroke="#191714" stroke-opacity=".15"/><text x="426" y="265" text-anchor="middle" font-weight="600">Brand</text></g>
-      <g transform="rotate(1 496 259)"><rect x="464" y="230" width="64" height="58" rx="3" fill="#ece6da" stroke="#191714" stroke-opacity=".15"/><text x="496" y="263" text-anchor="middle" font-weight="600">Brand</text></g>
-      <g transform="rotate(6 566 263)"><rect x="534" y="234" width="64" height="58" rx="3" fill="#f1ece2" stroke="#191714" stroke-opacity=".15"/><text x="566" y="267" text-anchor="middle" font-weight="600">Brand</text></g>
-    </g>
-    <text x="496" y="326" text-anchor="middle" font-size="11" letter-spacing="1.8" fill="rgb(243 239 231 / .72)">THE PORTFOLIO</text>
-  </svg>
+  <svg class="scene" id="hero" viewBox="0 0 600 520" role="img" aria-label="A contractor rises into Tier 2 Partner, which rises to Managing Partner and General Managing Partner. Brands sit in the Partner's portfolio, and the founder speaks to the Partner directly."></svg>
 </header>
 
-<section class="band" id="ladder">
-  <div class="head">
-    <span class="label">Part A · One ladder</span>
-    <h2>From Contractor to General Managing Partner</h2>
-    <p>Everyone starts as a contractor and earns the Partner Share on their brands from the day they sign. Above Partner, the ladder is the same as LTP's.</p>
+<div class="panels" id="ladder">
+  <div class="panel">
+    <h3>Contractor</h3>
+    <p class="d">Everyone at YV starts as an independent contractor. After 40 hours of training they sign the Partner Agreement and earn the full 25% Partner Share on their brands from the day they sign.</p>
+    <ul class="tiers">
+      <li><b>T1 · Contractor</b><span class="mono">25% Partner Share from signing</span></li>
+      <li><b>Share eligibility</b><span class="mono">6 months after signing</span></li>
+      <li><b>T2 · Partner</b><span class="mono">Share held + review passed</span></li>
+    </ul>
+    <svg class="scene" id="s-con" viewBox="0 0 320 220" role="img" aria-label="Training feeds the Contractor, who reaches a share at six months"></svg>
   </div>
-  <ol class="ladder" reversed>
-    <li><span class="label t">Tier 4</span><div><h3>General Managing Partner</h3><p class="how">Appointed from the Managing Partners. Runs the office, sets the variables, approves spend under V-13.</p></div><p class="pay"><span class="label">Pay</span>Office share (V-06) of the office's Fee Income; other pay V-05.</p></li>
-    <li><span class="label t">Tier 3</span><div><h3>Managing Partner</h3><p class="how">Partner KPIs met for consecutive quarters (V-04), a market plan defended, elevated by the GMP. Manages new contractors and contracts; assigns brands.</p></div><p class="pay"><span class="label">Pay</span>Own Partner Share on own brands; override V-15, if any.</p></li>
-    <li><span class="label t">Tier 2</span><div><h3>Partner</h3><p class="how">Six months after signing, one YV share bought, advancement review passed.</p></div><p class="pay"><span class="label">Pay</span>The 25% Partner Share on each brand they source or hold.</p></li>
-    <li><span class="label t">Tier 1</span><div><h3>Contractor</h3><p class="how">40 hours of training (20 at gatherings, 20 on a live season beside a Partner), then the Partner Agreement is signed.</p></div><p class="pay"><span class="label">Pay</span>The 25% Partner Share from day one. No salary.</p></li>
-  </ol>
-  <p class="gone">Not at YV: <s>Employee Track</s>, <s>Real Estate Photographer Track</s>, <s>Reception</s>, <s>Customer Support &amp; Concierge</s>. Partners are the brand's reception: the founder speaks to their Custodian, not to a desk.</p>
+  <div class="panel">
+    <h3>The portfolio</h3>
+    <p class="d">A brand stands where LTP has a listing. The founder owns the brand; the residency is YV's, and it sits in exactly one Custodian's portfolio. That Custodian is the brand's reception: there is no desk.</p>
+    <ul class="tiers">
+      <li><b>Sourcer</b><span class="mono">12.5% · brought the brand in</span></li>
+      <li><b>Custodian</b><span class="mono">12.5% · holds the brand</span></li>
+    </ul>
+    <svg class="scene" id="s-port" viewBox="0 0 320 220" role="img" aria-label="Brands held on a Partner's portfolio"></svg>
+  </div>
+  <div class="panel">
+    <h3>Partner and above</h3>
+    <p class="d">Above Partner, the ladder is LTP's. A Partner is a candidate for Managing Partner, and a Managing Partner is a candidate for GMP. Only Tier 3 uses the title "Managing Partner".</p>
+    <ul class="tiers">
+      <li><b>T2 · Partner</b><span class="mono">25% Partner Share</span></li>
+      <li><b>T3 · Managing Partner</b><span class="mono">Own share · override V-15</span></li>
+      <li><b>T4 · General Managing Partner</b><span class="mono">Office share V-06</span></li>
+    </ul>
+    <svg class="scene" id="s-up" viewBox="0 0 320 220" role="img" aria-label="Three tiers stacked from Partner to General Managing Partner"></svg>
+  </div>
+</div>
+
+<section class="band" id="desk">
+  <div class="head">
+    <span class="mono">No reception · no photo line</span>
+    <h2>The Custodian is the brand's reception</h2>
+    <p>At LTP, Reception and Customer Support &amp; Concierge stand between the people and the Custodian. At YV the relation to the brand is the work, so the founder and the brand's members go straight to their Custodian. What the desk did for money moves to YV itself.</p>
+  </div>
+  <div class="scroller"><svg class="scene" id="s-desk" viewBox="0 0 900 410" role="img" aria-label="The founder and the brand's members speak to the Custodian directly. The Custodian runs the Season, answers concerns and books gatherings. Partners ask YV for withdrawals; YV keeps statements, invoices and the member ledger, with a GMP check where V-13 requires one, and pays on Friday."></svg></div>
+  <div class="desks">
+    <div class="desk"><span class="mono">Custodian · moved from the desk</span><h3>What the Custodian does</h3><ul><li>Is the founder's one contact at YV, in a group of the founder, the official YV account and the Custodian (P3).</li><li>Runs the brand's seasons (P1) and keeps its members (P2).</li><li>Takes concerns from the founder and from members, decides and closes them (P5).</li><li>Books venues, production, food and printing for gatherings (P7).</li></ul></div>
+    <div class="desk"><span class="mono">YV · the company</span><h3>What YV keeps</h3><ul><li>Weekly statements and Friday withdrawals, processed by the GMP or whom the GMP names (P8).</li><li>Invoices for gatherings, issued and recorded by YV (P7).</li><li>The member ledger: who joined, in which season, with which badges (P2).</li><li>A GMP check on spend and withdrawals of a kind listed in <span class="v">V-13</span>.</li></ul></div>
+  </div>
 </section>
 
-<section class="band" id="roles">
+<section class="band" id="leadership">
   <div class="head">
-    <span class="label">A3 · Brands in residence</span>
-    <h2>Three roles on a brand</h2>
-    <p>The founder owns the brand. The residency is YV's mandate, under the Residency Agreement, to take that brand to market with its people, seasons and gatherings. Each residency sits in exactly one Custodian's portfolio.</p>
+    <span class="mono">Tier 2 to Tier 4</span>
+    <h2>Partner and above</h2>
+    <p>People in each tier are candidates for the next one.</p>
   </div>
-  <div class="sheets">
-    <article class="paper"><span class="label">Sourcing Share</span><span class="pct">12.5%</span><h3>Sourcer</h3><p>Brought the brand to YV: introduced the founder and got the Residency Agreement signed.</p></article>
-    <article class="paper"><span class="label">Custodian Share · Support inside</span><span class="pct">12.5%</span><h3>Custodian</h3><p>Holds the brand in their portfolio and is its direct relation at YV. Runs its seasons, cares for the founder, answers its members, handles disputes.</p></article>
-    <article class="paper"><span class="label">Support Share · from the Custodian</span><span class="pct">5%</span><h3>Support</h3><p>Anyone assigned to help on the brand's seasons, such as a gathering host, a creator or a producer. Default 5%; the Custodian may agree 0% to 12.5% in writing.</p></article>
+  <div class="roles">
+    <div class="role"><span class="mono">Tier 2 · Managing Partner candidate</span><h3>Partner</h3><p>Holds a YV share and a portfolio of brands. Brings brands in and looks after them as Custodian. Earns the 25% Partner Share.</p></div>
+    <div class="role"><span class="mono">Tier 3 · GMP candidate</span><h3>Managing Partner</h3><p>Becomes Managing Partner after meeting Partner KPIs for consecutive quarters (V-04), defending a plan for their market, and being elevated by the GMP. Manages new contractors and contracts, and can assign brands.</p></div>
+    <div class="role"><span class="mono">Tier 4</span><h3>General Managing Partner</h3><p>Appointed from the Managing Partners. Runs the office, receives the GMP office share (V-06) of the office's Fee Income, and sets the variables.</p></div>
   </div>
 </section>
 
 <section class="band" id="share">
+  <div class="head">
+    <span class="mono">Compensation · same split as LTP</span>
+    <h2>The 25% Partner Share</h2>
+    <p>The founder owns the brand. The residency belongs to YV and sits in the Custodian's portfolio. The Partner Share is 25% of the fees YV actually receives for a brand: the residency fee, season fees and any success fee. It is never paid on the brand's own sales. Half goes to the person who brought the brand in, and half to the person who looks after it.</p>
+  </div>
   <div class="split">
-    <div>
-      <div class="head">
-        <span class="label">A4 · Same split as LTP</span>
-        <h2>The 25% Partner Share</h2>
-        <p>Paid on Fee Income: the residency fee, season fees and any success fee YV actually receives for a brand. Never on the brand's own sales. Equity a brand grants YV waits on V-16.</p>
-      </div>
-      <table class="split-table">
-        <thead><tr><th class="label">Share</th><th class="label">Of Fee Income</th><th class="label">Goes to</th></tr></thead>
-        <tbody>
-          <tr><td>Sourcing Share</td><td>12.5%</td><td>Sourcer</td></tr>
-          <tr><td>Custodian Share</td><td>12.5%</td><td>Custodian</td></tr>
-          <tr class="in"><td>Support Share, inside it</td><td>5% default</td><td>Support, otherwise the Custodian</td></tr>
-          <tr class="sum"><td>Total</td><td>25%</td><td></td></tr>
-        </tbody>
-      </table>
-      <p class="note" style="margin-top:16px">Credited at the weekly consolidation (V-12) to each Portfolio Account, with a statement. Withdrawn on Fridays.</p>
-    </div>
-    <form class="card calc" id="calc" aria-labelledby="calc-t">
-      <h3 id="calc-t">Try one brand's week</h3>
-      <label for="fee"><span class="label">Fee Income received this week</span><input id="fee" type="number" min="0" step="100" value="10000" inputmode="decimal"></label>
-      <label class="chk" for="same"><input id="same" type="checkbox"> Sourcer is also the Custodian</label>
-      <div class="row">
-        <label class="chk" for="sup"><input id="sup" type="checkbox" checked> Support assigned</label>
-        <label for="pct"><span class="label">Support Share %</span><input id="pct" type="number" min="0" max="12.5" step="0.5" value="5"></label>
-      </div>
+    <svg class="scene" id="s-split" viewBox="0 0 640 340" role="img" aria-label="A brand's Fee Income splits into a 12.5% Sourcing Share and a 12.5% Custodian Share. Each share goes to the weekly consolidation. When the Sourcer is also the Custodian, the two shares stack into one block with one line to the consolidation."></svg>
+    <form class="card calc" id="calc" autocomplete="off">
+      <span class="mono">Example · one brand, one week</span>
+      <label for="fee">Fee Income received (any currency)
+        <input id="fee" type="number" min="0" step="100" value="10000" inputmode="numeric">
+      </label>
+      <label class="chk" for="same"><input id="same" type="checkbox"> The Sourcer is also the Custodian of this brand</label>
       <div class="out" id="out" aria-live="polite"></div>
-      <p class="note">Example figures in any currency. Shares are worked to the cent before rounding for display.</p>
+      <p class="note">Example figures. The amounts are credited to each person's Portfolio Account at the weekly consolidation and can be withdrawn on Fridays. Equity a brand grants YV waits on <span class="v">V-16</span>.</p>
     </form>
+  </div>
+</section>
+
+<section class="band" id="clock">
+  <div class="split">
+    <div class="head" style="margin-bottom:0">
+      <span class="mono">Pay schedule</span>
+      <h2>Pay is credited weekly</h2>
+      <p>Once a week, at the cut-off, YV adds up the fees received for every brand and credits each person's shares to their Portfolio Account, with a statement. Withdrawals are paid on Fridays.</p>
+      <p class="note">Cut-off day and time: <span class="v">V-12</span></p>
+    </div>
+    <svg class="scene" id="s-clock" viewBox="0 0 600 350" role="img" aria-label="Weekly cycle: Fee Income received, weekly consolidation, shares credited to Portfolio Accounts, Friday withdrawals"></svg>
+  </div>
+</section>
+
+<section class="band" id="roles">
+  <div class="head">
+    <span class="mono">Recorded when a brand is taken into residence (P4)</span>
+    <h2>Two roles on a brand</h2>
+  </div>
+  <div class="roles two">
+    <div class="role"><span class="mono">12.5%</span><h3>Sourcer</h3><p>The person who brought the brand in by introducing the founder and getting the Residency Agreement signed.</p></div>
+    <div class="role"><span class="mono">12.5%</span><h3>Custodian</h3><p>The person who holds the brand in their portfolio and is its direct relation at YV. Runs its seasons, cares for the founder, answers its members and handles disputes. The Sourcer can also be the Custodian.</p></div>
+  </div>
+  <div class="tbl" style="margin-top:32px">
+    <table>
+      <thead><tr><th>When</th><th>Sourcing Share</th><th>Custodian Share</th></tr></thead>
+      <tbody>
+        <tr><td>Sourcer leaves holding a YV share, in good standing</td><td>Kept while the brand stays with YV and the share is held</td><td>—</td></tr>
+        <tr><td>Sourcer leaves without a YV share, or sells the share</td><td>Goes to YV from that date</td><td>—</td></tr>
+        <tr><td>Termination for cause</td><td>Goes to YV, shareholder or not</td><td>Next Custodian, or YV if none</td></tr>
+        <tr><td>Custodian leaves or is reassigned</td><td>—</td><td>Next Custodian, or YV while none</td></tr>
+        <tr><td>Brand leaves YV (the Residency Agreement ends)</td><td>Ends</td><td>Ends</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
 <section class="band" id="season">
   <div class="head">
-    <span class="label">P1 · New · proposed</span>
+    <span class="mono">P1 · New</span>
     <h2>The Season</h2>
-    <p>We don't just go to market. Each season the Custodian runs one pass of these seven steps with the brand, and each pass starts larger than the last: more people, more frequent story beats, more that early members have earned.</p>
+    <p>We don't just go to market. Each season the Custodian takes the brand through seven steps, and each season starts larger than the last: more people, more frequent story beats, and more that early members have earned.</p>
   </div>
-  <div class="season">
-    <svg viewBox="0 0 360 360" role="img" aria-labelledby="season-t">
-      <title id="season-t">Three seasons as widening rings. Seven steps sit on each ring; each season starts larger than the one before.</title>
-      <defs>
-        <radialGradient id="fire" cx="50%" cy="50%" r="50%">
-          <stop offset="0" stop-color="rgb(255 222 170)" stop-opacity=".9"/>
-          <stop offset=".35" stop-color="rgb(255 168 88)" stop-opacity=".45"/>
-          <stop offset="1" stop-color="rgb(255 168 88)" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="180" cy="180" r="44" fill="url(#fire)" class="ember"/>
-      <g fill="none" stroke="rgb(255 236 214 / .22)">
-        <circle cx="180" cy="180" r="70"/>
-        <circle cx="180" cy="180" r="108"/>
-        <circle cx="180" cy="180" r="146" stroke="rgb(255 168 88 / .55)"/>
-      </g>
-      <g font-size="10" letter-spacing="1.4" fill="rgb(243 239 231 / .74)" text-anchor="middle">
-        <text x="180" y="117">SEASON 1</text>
-        <text x="180" y="79">SEASON 2</text>
-        <text x="180" y="41">SEASON 3</text>
-      </g>
-      <g class="ring-orbit"><circle cx="326" cy="180" r="5" fill="rgb(255 222 170)"/><circle cx="326" cy="180" r="11" fill="rgb(255 168 88)" opacity=".3"/></g>
-      <g font-size="12" font-weight="600" text-anchor="middle">
-        <g><circle cx="243.4" cy="48.5" r="13" fill="#f1ece2"/><text x="243.4" y="52.5" fill="#191714">1</text></g>
-        <g><circle cx="322.3" cy="147.5" r="13" fill="#f1ece2"/><text x="322.3" y="151.5" fill="#191714">2</text></g>
-        <g><circle cx="294.2" cy="271" r="13" fill="#f1ece2"/><text x="294.2" y="275" fill="#191714">3</text></g>
-        <g><circle cx="180" cy="326" r="13" fill="#f1ece2"/><text x="180" y="330" fill="#191714">4</text></g>
-        <g><circle cx="65.8" cy="271" r="13" fill="#f1ece2"/><text x="65.8" y="275" fill="#191714">5</text></g>
-        <g><circle cx="37.7" cy="147.5" r="13" fill="#f1ece2"/><text x="37.7" y="151.5" fill="#191714">6</text></g>
-        <g><circle cx="116.6" cy="48.5" r="13" fill="#f1ece2"/><text x="116.6" y="52.5" fill="#191714">7</text></g>
-      </g>
-    </svg>
-    <ol class="steps">
-      <li><div><b>Warm circle.</b> <p>The first early-access people come from warm connections, the brand's and ours.</p></div></li>
-      <li><div><b>Focus group.</b> <p>They use the product and are heard. What they find becomes case studies, published only with the brand's consent.</p></div></li>
-      <li><div><b>Gathering.</b> <p>Communal gatherings with the focus group. The brand's strategic narrative and its branching storylines are taken from what happens there.</p></div></li>
-      <li><div><b>Story beat.</b> <p>One movement story beat, built from those storylines, that gets people moving to join early access.</p></div></li>
-      <li><div><b>Early access.</b> <p>The program opens and the first loyal customers join. Focus-group members get early-bird benefits.</p></div></li>
-      <li><div><b>Badges and perks.</b> <p>Commemorative badges and perks reward active participation, and compound as each new capability is added.</p></div></li>
-      <li><div><b>Season close.</b> <p>The Custodian and the founder read what grew and set the next season's scale.</p></div></li>
-    </ol>
+  <div class="scroller"><svg class="scene" id="s-season" viewBox="0 0 960 330" role="img" aria-label="Seven steps of a season, from warm circle to season close, then back to the start at a larger scale"></svg></div>
+  <div class="steps">
+    <div class="step"><span class="k">P1.1</span><b>Warm circle</b><p>The first early-access people come from warm connections, the brand's and ours.</p></div>
+    <div class="step"><span class="k">P1.2</span><b>Focus group</b><p>They use the product and are heard. Results become case studies, published only with the brand's consent.</p></div>
+    <div class="step"><span class="k">P1.3</span><b>Gathering</b><p>Communal gatherings. The strategic narrative and its branching storylines are taken from what happens there.</p></div>
+    <div class="step"><span class="k">P1.4</span><b>Story beat</b><p>One movement story beat, built from those storylines, that gets people moving to join.</p></div>
+    <div class="step"><span class="k">P1.5</span><b>Early access</b><p>The program opens; the first loyal customers join. Focus-group members get early-bird benefits.</p></div>
+    <div class="step"><span class="k">P1.6</span><b>Badges and perks</b><p>Commemorative badges and perks reward active participation, and compound with each new capability.</p></div>
+    <div class="step"><span class="k">P1.7</span><b>Season close</b><p>The Custodian and the founder read what grew and set the next season's scale.</p></div>
   </div>
+</section>
+
+<section class="band" id="shares">
+  <div class="head">
+    <span class="mono">Shares</span>
+    <h2>From signing to Partner</h2>
+    <p>The lock-up period starts on the day a contractor signs.</p>
+  </div>
+  <div class="scroller"><svg class="scene" id="s-steps" viewBox="0 0 980 380" role="img" aria-label="Six steps rising from signing to Partner: signing, eligible, offer, accept, notary, Partner"></svg></div>
 </section>
 
 <section class="band" id="protocols">
   <div class="head">
-    <span class="label">Part B · Proposed</span>
-    <h2>Protocols, from LTP's to YV's</h2>
-    <p>Each LTP protocol is kept, adapted for brands, or removed with the desk and the photo line. Three are new, because LTP never had to turn customers into members.</p>
+    <span class="mono">Part B · 18 protocols in five groups: brand, service, pay &amp; shares, people, rules</span>
+    <h2>Protocols</h2>
+    <p>Each protocol says who is responsible for it and which LTP protocol it came from. Click or tap one to read it in full. Someone who breaks a protocol gets a written warning with a date to fix it by (P14).</p>
   </div>
-  <div class="scroll">
-    <table class="proto">
-      <thead><tr><th class="label">P</th><th class="label">Protocol</th><th class="label">Who</th><th class="label">What it says</th><th class="label">From LTP</th><th class="label">Change</th></tr></thead>
-      <tbody>
-        <tr><td class="code">P1</td><td class="name">The Season</td><td>Custodian, with the brand</td><td class="what">Seven steps a season, each season larger. Length and seasons a year: V-08.</td><td class="from">—</td><td><span class="chip new">New</span></td></tr>
-        <tr><td class="code">P2</td><td class="name">Members and badges</td><td>Custodian; YV keeps the ledger</td><td class="what">Everyone who joins is recorded with the season they joined. A badge is never taken back. Perks are the brand's, written into the season plan, and carry into every later season.</td><td class="from">—</td><td><span class="chip new">New</span></td></tr>
-        <tr><td class="code">P3</td><td class="name">Duty of care</td><td>Custodian</td><td class="what">The brand's direct relation. A group of the founder, the official YV account and the Custodian, opened within V-09 days; the founder answered within V-10 hours; a check-in every week of a season.</td><td class="from">B-02 + desk</td><td><span class="chip new">New</span></td></tr>
-        <tr><td class="code">P4</td><td class="name">Intake and Brand Packet</td><td>Sourcer</td><td class="what">Signed Residency Agreement, the brand story as the founder tells it, product state, what the first season should reach, marks and assets, known limits. Incomplete packets do not start.</td><td class="from">B-01</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P5</td><td class="name">Brand and member concerns</td><td>Custodian</td><td class="what">Come straight to the Custodian, who answers, decides, carries it out or assigns it, and records it closed. No Custodian: YV handles it.</td><td class="from">B-05</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P6</td><td class="name">Disputes and stakeholder relations</td><td>Custodian</td><td class="what">Unresolved after V-11 days goes to a Managing Partner or the GMP.</td><td class="from">B-06</td><td><span class="chip kept">Kept</span></td></tr>
-        <tr><td class="code">P7</td><td class="name">Gatherings: vendors and invoicing</td><td>Custodian; YV invoices</td><td class="what">The Custodian books venues, production, food and printing the season plan calls for. Spend marked by V-13 waits for the GMP.</td><td class="from">B-19</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P8</td><td class="name">Consolidation, statements, withdrawals</td><td>YV: the GMP or whom the GMP names</td><td class="what">Weekly credit and statement; Friday withdrawals, now processed without a concierge.</td><td class="from">B-15</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P9</td><td class="name">Training before signing</td><td>Managing Partner</td><td class="what">40 hours: 20 at gatherings, 20 on a live season beside a Partner.</td><td class="from">B-08</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P10</td><td class="name">Friday meeting</td><td>Everyone</td><td class="what">Open, not compulsory: everyone at YV is a contractor, and required attendance can make a contractor look like an employee.</td><td class="from">B-07</td><td><span class="chip adapted">Adapted</span></td></tr>
-        <tr><td class="code">P11–P18</td><td class="name">Titles, conduct, Formal Notices, warnings, advancement review, share offer, leaving, changing protocols</td><td>As named</td><td class="what">LTP's B-09 to B-17 with YV for LTP and Tier 3 for Tier 5. KPI targets (V-01) are read from season outcomes.</td><td class="from">B-09 – B-17</td><td><span class="chip kept">Kept</span></td></tr>
-        <tr class="removed"><td class="code">—</td><td class="name">Property video</td><td>—</td><td class="what">Sent to reception; there is no reception.</td><td class="from">B-03</td><td><span class="chip removed">Removed</span></td></tr>
-        <tr class="removed"><td class="code">—</td><td class="name">Photo maintenance</td><td>—</td><td class="what">There is no photo line.</td><td class="from">B-04</td><td><span class="chip removed">Removed</span></td></tr>
-        <tr class="removed"><td class="code">—</td><td class="name">Bookings and the Reception Booking Commission</td><td>—</td><td class="what">Desk work; the Custodian is the brand's reception.</td><td class="from">B-18, A2.6</td><td><span class="chip removed">Removed</span></td></tr>
-      </tbody>
+  <div class="scroller"><svg class="scene" id="s-protos" viewBox="0 0 960 460" role="img" aria-label="The 18 protocols in five groups: brand, service, pay and shares, people and rules"></svg></div>
+  <div class="pcard" id="pcard" aria-live="polite"></div>
+  <div class="tbl" style="margin-top:40px">
+    <table>
+      <thead><tr><th>LTP</th><th>LTP protocol</th><th>YV</th><th>Change</th></tr></thead>
+      <tbody id="maprows"></tbody>
     </table>
   </div>
 </section>
 
 <section class="band" id="clearance">
   <div class="head">
-    <span class="label">Part F · For Seonso</span>
-    <h2>Where LTP's protocols break, and what we propose</h2>
-    <p>Eight points to clear. Each is written into the chart above as proposed; a cleared point becomes the chart.</p>
+    <span class="mono">Part F · cleared by Seonso, 21 Nov 2026</span>
+    <h2>Where LTP's protocols break, and what YV does</h2>
+    <p>Eight points, cleared by Seonso on 21 November 2026. Each is written into this chart.</p>
   </div>
-  <div class="clear">
-    <article class="paper"><span class="n">C1</span><h3>The early-access loop has no LTP counterpart</h3><p class="prop"><b>Proposed:</b> P1 in seven steps, one season is one pass; P2 keeps the members between seasons.</p></article>
-    <article class="paper"><span class="n">C2</span><h3>Desk duties have no desk</h3><p class="prop"><b>Proposed:</b> founder requests (P3), concerns (P5) and gathering vendors (P7) go to the Custodian. Statements and withdrawals go to YV (P8).</p></article>
-    <article class="paper"><span class="n">C3</span><h3>Desk and photo protocols</h3><p class="prop"><b>Proposed:</b> remove B-03, B-04, B-18, the office (A2.5) and the Reception Booking Commission (A2.6).</p></article>
-    <article class="paper"><span class="n">C4</span><h3>The Support Share was the photographer's</h3><p class="prop"><b>Proposed:</b> keep it at 5% default inside the Custodian Share, for whoever is assigned as Support.</p></article>
-    <article class="paper"><span class="n">C5</span><h3>Fee Income said "never rent"</h3><p class="prop"><b>Proposed:</b> residency, season and success fees received; never the brand's sales. Equity a brand grants YV: set later as V-16.</p></article>
-    <article class="paper"><span class="n">C6</span><h3>Who gives and keeps the perks</h3><p class="prop"><b>Proposed:</b> perks are the brand's, written into the season plan. Badges are never taken back. YV keeps the member ledger.</p></article>
-    <article class="paper"><span class="n">C7</span><h3>A Friday meeting of contractors</h3><p class="prop"><b>Proposed:</b> open to all, not compulsory.</p></article>
-    <article class="paper"><span class="n">C8</span><h3>Ladder and shares</h3><p class="prop"><b>Proposed:</b> a Partner holds a YV share, as at LTP. Tiers numbered 1 to 4, since there is no employee ladder below.</p></article>
+  <div class="roles clear">
+    <div class="role"><span class="mono">C1 · Cleared</span><h3>The early-access loop has no LTP counterpart</h3><p><b>P1 in seven steps</b>, one season is one pass; P2 keeps the members between seasons.</p></div>
+    <div class="role"><span class="mono">C2 · Cleared</span><h3>Desk duties have no desk</h3><p><b>To the Custodian:</b> founder requests (P3), concerns (P5), gathering vendors (P7). Statements and withdrawals go to YV (P8).</p></div>
+    <div class="role"><span class="mono">C3 · Cleared</span><h3>Desk and photo protocols</h3><p><b>Removed:</b> B-03, B-04, B-18, the office roles and the Reception Booking Commission.</p></div>
+    <div class="role"><span class="mono">C4 · Cleared, then changed</span><h3>The Support Share was the photographer's</h3><p><b>Removed.</b> No Support role and no 5% Support Share: the Custodian keeps the whole 12.5%.</p></div>
+    <div class="role"><span class="mono">C5 · Cleared</span><h3>Fee Income said "never rent"</h3><p><b>Residency, season and success fees</b> received; never the brand's sales. Equity a brand grants YV: V-16.</p></div>
+    <div class="role"><span class="mono">C6 · Cleared</span><h3>Who gives and keeps the perks</h3><p><b>Perks are the brand's</b>, written into the season plan. Badges are never taken back. YV keeps the member ledger.</p></div>
+    <div class="role"><span class="mono">C7 · Cleared</span><h3>A Friday meeting of contractors</h3><p><b>Open, not compulsory.</b> Required attendance can make a contractor look like an employee.</p></div>
+    <div class="role"><span class="mono">C8 · Cleared</span><h3>Ladder and shares</h3><p><b>A Partner holds a YV share</b>, as at LTP. Tiers numbered 1 to 4, with no employee ladder below.</p></div>
   </div>
 </section>
 
-<section class="band" id="rules">
+<section class="band" id="restrictions">
   <div class="head">
-    <span class="label">Part C</span>
+    <span class="mono">Part C · everyone</span>
     <h2>Rules for everyone</h2>
   </div>
-  <div class="rules">
-    <div class="rule"><span class="label">During and 3 years after</span><h3>Confidentiality</h3><p>Brand plans, founder conversations, member lists, pricing, systems, financials and partnership terms.</p></div>
-    <div class="rule"><span class="label">During and 2 years after</span><h3>No competing</h3><p>No work for a business competing directly with YV's brand residencies, in the markets V-17 names.</p></div>
-    <div class="rule"><span class="label">During and 2 years after</span><h3>No poaching</h3><p>No taking YV brands or members to a competitor, and no recruiting YV people.</p></div>
-    <div class="rule"><span class="label">From the day made</span><h3>Work product</h3><p>Story materials, case studies and the member ledger belong to YV. The brand's name, marks and product stay the brand's.</p></div>
+  <div class="roles">
+    <div class="role"><span class="mono">While at YV and for 3 years after</span><h3>Confidentiality</h3><p>Keep brand plans, founder conversations, member lists, pricing, systems, financials and partnership terms confidential.</p></div>
+    <div class="role"><span class="mono">While at YV and for 2 years after</span><h3>No competing, no poaching</h3><p>Do not work for a direct competitor in the markets V-17 names, take YV brands or members away, or recruit YV people.</p></div>
+    <div class="role"><span class="mono">From the day they are made</span><h3>Work product</h3><p>Story materials, case studies and the member ledger made for YV belong to YV. The brand's name, marks and product stay the brand's.</p></div>
   </div>
 </section>
 
 <section class="band" id="variables">
   <div class="head">
-    <span class="label">Part D · Set by the GMP in writing</span>
+    <span class="mono">Part D · set by the GMP in writing</span>
     <h2>Variables</h2>
-    <p>None set yet. A step that depends on an unset variable does not take effect.</p>
+    <p>Anything that depends on a variable does not apply until the GMP sets it. None is set yet.</p>
   </div>
-  <ul class="vars">
-    <li><span>V-00</span><span>Effective date of this version</span></li>
-    <li><span>V-01</span><span>Partner KPI targets, read from season outcomes</span></li>
-    <li><span>V-02</span><span>Share value and discounts</span></li>
-    <li><span>V-03</span><span>Share lock-up, months</span></li>
-    <li><span>V-04</span><span>Managing Partner elevation thresholds</span></li>
-    <li><span>V-05</span><span>GMP criteria and pay</span></li>
-    <li><span>V-06</span><span>GMP office share, % of Fee Income</span></li>
-    <li><span>V-07</span><span>Partner base pay (none unless set)</span></li>
-    <li><span>V-08</span><span>Season length and seasons a year</span></li>
-    <li><span>V-09</span><span>Days to open the brand group</span></li>
-    <li><span>V-10</span><span>Hours to answer the founder</span></li>
-    <li><span>V-11</span><span>Days before a dispute goes up</span></li>
-    <li><span>V-12</span><span>Weekly consolidation cut-off</span></li>
-    <li><span>V-13</span><span>Spend and withdrawals needing GMP approval</span></li>
-    <li><span>V-14</span><span>Share buy-back price</span></li>
-    <li><span>V-15</span><span>Managing Partner override</span></li>
-    <li><span>V-16</span><span>Equity a brand grants YV: Partner Share treatment</span></li>
-    <li><span>V-17</span><span>Markets under the no-competing rule</span></li>
-  </ul>
+  <div class="vars" id="varlist"></div>
 </section>
 
-<footer>
-  <span>YV Group · Organisation chart, draft 0.1, 21 November 2026.</span>
-  <span>Made from the LTP Organisation Chart v1.0. The written source is <code>org-chart/ORG-CHART.md</code> in the YV repository.</span>
+<footer class="mono">
+  <span>YV Organisation Chart &amp; Protocols · v0.2 · made from the LTP chart v1.0</span>
+  <span>Source: org-chart/ORG-CHART.md</span>
 </footer>
 </div>
 
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
-  const fee = $('fee'), same = $('same'), sup = $('sup'), pct = $('pct'), out = $('out');
-  const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const line = (label, value, cls) => `<div${cls ? ` class="${cls}"` : ''}><span>${label}</span><span>${fmt(value)}</span></div>`;
+<div id="tip" role="tooltip"></div>
 
-  function render() {
-    const income = Math.max(0, Number(fee.value) || 0);
-    const supportPct = sup.checked ? Math.min(12.5, Math.max(0, Number(pct.value) || 0)) : 0;
-    pct.disabled = !sup.checked;
-    const sourcing = income * 0.125;
-    const custodianShare = income * 0.125;
-    const support = income * supportPct / 100;
-    const custodian = custodianShare - support;
-    const rows = same.checked
-      ? [line('Sourcer and Custodian, one person', sourcing + custodian)]
-      : [line('Sourcer · 12.5%', sourcing), line(`Custodian · 12.5%${support ? ` less Support` : ''}`, custodian)];
-    if (support) rows.push(line(`Support · ${supportPct}%`, support));
-    rows.push(line('Partner Share · 25%', sourcing + custodianShare, 'tot'));
-    rows.push(line('YV keeps · 75%', income * 0.75, 'yv'));
-    out.innerHTML = rows.join('');
-  }
-  $('calc').addEventListener('input', render);
-  $('calc').addEventListener('submit', (e) => e.preventDefault());
-  render();
+<script>
+(function(){
+const R = 0.866;
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+function cube(cx, cy, s, p){ const w = R*s, h = s/2;
+  return `<g><polygon points="${cx},${cy} ${cx+w},${cy+h} ${cx},${cy+2*h} ${cx-w},${cy+h}" fill="var(--${p}1)" stroke="var(--${p}e)" stroke-width="1"/>`+
+  `<polygon points="${cx-w},${cy+h} ${cx},${cy+2*h} ${cx},${cy+2*h+s} ${cx-w},${cy+h+s}" fill="var(--${p}2)" stroke="var(--${p}e)" stroke-width="1"/>`+
+  `<polygon points="${cx},${cy+2*h} ${cx+w},${cy+h} ${cx+w},${cy+h+s} ${cx},${cy+2*h+s}" fill="var(--${p}3)" stroke="var(--${p}e)" stroke-width="1"/></g>`; }
+function disc(cx, cy, r, t, p){ const ry = r/2;
+  return `<g><path d="M${cx-r} ${cy} L${cx-r} ${cy+t} A${r} ${ry} 0 0 0 ${cx+r} ${cy+t} L${cx+r} ${cy} Z" fill="var(--${p}3)" stroke="var(--${p}e)" stroke-width="1"/>`+
+  `<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${ry}" fill="var(--${p}1)" stroke="var(--${p}e)" stroke-width="1"/></g>`; }
+function tag(x, y, text, anchor, strong){ const w = text.length*6.6 + 18, x0 = anchor === 'end' ? x - w : anchor === 'middle' ? x - w/2 : x;
+  return `<g><rect x="${x0}" y="${y-11}" width="${w}" height="20" fill="${strong ? 'var(--hi)' : 'var(--tag)'}" stroke="${strong ? 'var(--hi)' : 'var(--ge)'}" stroke-width="1"/>`+
+  `<text x="${x0 + w/2}" y="${y+3}" text-anchor="middle" font-family="var(--mono)" font-size="10.5" letter-spacing=".5" fill="${strong ? 'var(--on-hi)' : 'var(--ink)'}">${text}</text></g>`; }
+let fid = 0;
+function flow(d, dur){ const id = 'f' + (fid++);
+  return `<path id="${id}" class="flow" d="${d}"/><circle r="3" fill="var(--dot)"><animateMotion dur="${dur||3}s" repeatCount="indefinite"><mpath href="#${id}"/></animateMotion></circle>`; }
+function lead(d){ return `<path d="${d}" fill="none" stroke="var(--ne)" stroke-width="1" stroke-dasharray="2 3"/>`; }
+function diamond(x, y, s, cls, filled){ return `<polygon class="${cls}" points="${x},${y-s/2} ${x+s},${y} ${x},${y+s/2} ${x-s},${y}" fill="${filled ? 'var(--hi)' : 'none'}" stroke="var(--ge)" stroke-width="1"/>`; }
+function hot(t, d, nx, inner){ return `<g class="hot" tabindex="0" data-t="${esc(t)}" data-d="${esc(d)}"${nx ? ` data-n="${esc(nx)}"` : ''}>${inner}</g>`; }
+function put(id, html){ const el = document.getElementById(id); if (el) el.innerHTML = html; }
+function xbox(x, y, w, label, t){ const h = 44, d = 8, tn = t || 'n';
+  const [a, b] = label.split('|');
+  const txt = b ? `<text x="${x+w/2}" y="${y+19}" text-anchor="middle" font-family="var(--mono)" font-size="10.5" letter-spacing=".5" fill="var(--ink2)">${a}</text><text x="${x+w/2}" y="${y+35}" text-anchor="middle" font-family="var(--display)" font-size="12.5" fill="var(--ink)">${b}</text>`
+                : `<text x="${x+w/2}" y="${y+27}" text-anchor="middle" font-family="var(--mono)" font-size="12" letter-spacing=".6" fill="var(--ink)">${a}</text>`;
+  return `<g class="xb"><polygon class="top" points="${x},${y} ${x+d},${y-d} ${x+w+d},${y-d} ${x+w},${y}" fill="var(--${tn}2)" stroke="var(--${tn}e)" stroke-width="1"/>` +
+    `<polygon points="${x+w},${y} ${x+w+d},${y-d} ${x+w+d},${y+h-d} ${x+w},${y+h}" fill="var(--${tn}3)" stroke="var(--${tn}e)" stroke-width="1"/>` +
+    `<rect class="front" x="${x}" y="${y}" width="${w}" height="${h}" fill="var(--${tn}1)" stroke="var(--${tn}e)" stroke-width="1.2"/>${txt}</g>`; }
+const small = (x, y, t, a) => `<text x="${x}" y="${y}" ${a ? `text-anchor="${a}"` : ''} font-family="var(--mono)" font-size="10.5" letter-spacing=".5" fill="var(--ink2)">${t}</text>`;
+
+const T = {
+  gmp: ['Tier 4 · General Managing Partner','Runs an office and receives the GMP office share (V-06) of its Fee Income. Appointed from the Managing Partners.','Highest tier'],
+  mp: ['Tier 3 · Managing Partner','The candidate for GMP. Manages new contractors and contracts, and can assign brands.','Candidate for GMP'],
+  partner: ['Tier 2 · Partner','Holds a YV share and a portfolio of brands. Brings brands in and looks after them as Custodian.','Candidate for Managing Partner'],
+  con: ['Tier 1 · Contractor','An independent contractor who brings brands in and holds them, and earns the 25% Partner Share from signing.','Candidate for Partner at 6 months'],
+  brands: ['Brands in residence','Each brand sits in exactly one Custodian\'s portfolio, or with YV while it has none. Shares, fees and seasons are counted per brand.',''],
+  founder: ['Founder','Owns the brand and signs the Residency Agreement. Speaks to the brand\'s Custodian directly: there is no desk in between.',''],
+  rise: ['Rising a tier','To move up a tier, a person meets their KPIs and passes an advancement review. Tier 4 also needs an appointment.',''],
+};
+const H = k => T[k];
+
+/* HERO */
+put('hero',
+  flow('M120 404 V350 H236', 3.2) + flow('M330 430 V398', 2.2) + flow('M476 404 C450 404 440 372 426 356', 2.8) + flow('M452 322 V176', 4) +
+  diamond(560, 120, 9, 'float', true) + diamond(70, 200, 11, 'float', false) + diamond(220, 470, 9, 'float', false) + diamond(560, 300, 7, 'float', true) +
+  hot(...H('partner'), disc(330, 330, 96, 16, 'g') + disc(330, 306, 96, 16, 'g') + lead('M234 318 H200') + tag(196, 318, 'T2 · PARTNER', 'end', true)) +
+  hot(...H('mp'), disc(330, 252, 74, 12, 'p') + disc(330, 232, 74, 12, 'p') + disc(330, 212, 74, 12, 'p') + lead('M256 226 H226') + tag(222, 226, 'T3 · MANAGING PARTNER', 'end')) +
+  hot(...H('gmp'), disc(330, 162, 54, 12, 'n') + disc(330, 142, 54, 12, 'n') + lead('M276 146 H226') + tag(222, 146, 'T4 · GENERAL MANAGING PARTNER', 'end')) +
+  hot(...H('rise'), tag(462, 280, 'KPI + REVIEW', 'start') + tag(462, 190, 'APPOINTED', 'start')) +
+  hot(...H('founder'), cube(120, 398, 40, 'n') + tag(120, 498, 'FOUNDER · DIRECT', 'middle')) +
+  hot(...H('con'), cube(330, 426, 34, 'g') + tag(330, 508, 'T1 · CONTRACTOR', 'middle')) +
+  hot(...H('brands'), cube(492, 372, 22, 'p') + cube(526, 392, 22, 'p') + cube(500, 412, 22, 'p') + tag(510, 474, 'BRANDS · PORTFOLIO', 'middle'))
+);
+
+/* Contractor */
+put('s-con',
+  flow('M76 150 H130', 2.4) + flow('M196 108 C230 90 240 70 252 60', 2.6) +
+  hot('Training','Before signing, 40 hours of training: 20 hours at gatherings and 20 hours on a live season beside a Partner.','How contractors start', cube(60, 112, 26, 'n') + tag(60, 196, '40H TRAINING', 'middle')) +
+  hot(...H('con'), cube(160, 92, 46, 'g') + tag(160, 210, 'CONTRACTOR', 'middle', true)) +
+  hot('Share eligibility','A share can be bought 6 months after signing. A contractor who buys a share and passes the review becomes a Partner.','Step toward Partner', disc(268, 50, 26, 8, 'g') + tag(268, 92, '6 MO · SHARE', 'middle')) +
+  diamond(286, 160, 8, 'float', false)
+);
+
+/* Portfolio */
+put('s-port',
+  flow('M40 170 C70 150 90 140 104 132', 2.6) +
+  hot(...H('partner'), disc(170, 128, 96, 16, 'g') + tag(170, 204, 'CUSTODIAN · PORTFOLIO', 'middle', true)) +
+  hot('A brand','The founder owns it; the residency is YV\'s. Counted on its own for Fee Income, shares and seasons.','', cube(120, 82, 24, 'p')) +
+  hot('A brand','Each brand has one Custodian, who is its direct relation at YV.','', cube(172, 66, 24, 'p')) +
+  hot('A brand','A brand with no Custodian is held by YV.','', cube(222, 86, 24, 'p')) +
+  tag(30, 186, 'SOURCER', 'middle') + diamond(292, 40, 8, 'float', true)
+);
+
+/* Partner and above */
+const UP = [
+  ['T2 · Partner','Holds a share and a portfolio of brands; earns the 25% Partner Share.','Candidate for Managing Partner','g'],
+  ['T3 · Managing Partner','Manages contractors and contracts; can assign brands.','Candidate for GMP','p'],
+  ['T4 · General Managing Partner','Runs the office and sets the variables.','Highest tier','n'],
+];
+let up = flow('M60 196 V70 H112', 3.4);
+UP.forEach((t, i) => { up += hot(t[0], t[1], t[2], disc(160, 160 - i*44, 70 - i*12, 12, t[3]) + tag(246, 162 - i*44, 'T' + (i + 2), 'start', i === 0)); });
+up += diamond(40, 40, 7, 'float', true);
+put('s-up', up);
+
+/* The Custodian is the reception */
+put('s-desk',
+  flow('M106 82 H228', 2.4) + flow('M106 236 C170 236 180 100 228 96', 3) + flow('M106 356 C180 356 190 260 228 256', 3) +
+  flow('M458 82 H558', 2.2) + flow('M458 92 C510 92 516 172 558 172', 2.4) + flow('M458 100 C520 110 520 262 558 266', 2.8) + flow('M458 244 C510 244 520 276 558 278', 2.4) + flow('M340 268 V362 H558', 2.8) + flow('M678 362 H698', 1.8) +
+  small(114, 72, 'SPEAKS DIRECTLY') + small(118, 196, 'CONCERNS') + small(140, 330, 'WITHDRAWAL') + small(478, 74, 'RUNS') + small(478, 250, 'INVOICES') + small(360, 352, 'REQUEST') +
+  hot(...H('founder'), cube(70, 40, 34, 'n') + tag(70, 128, 'FOUNDER', 'middle')) +
+  hot('Members','People who joined through a season. Their concerns go straight to the Custodian.','', cube(70, 196, 34, 'n') + tag(70, 284, 'MEMBERS', 'middle')) +
+  hot('Partners','Ask to withdraw from their Portfolio Account, paid on Friday.','', cube(70, 306, 34, 'g') + tag(70, 394, 'PARTNERS', 'middle')) +
+  hot('Custodian','Holds the brand in their portfolio and is its direct relation at YV. Does what LTP\'s desk did for the people: founder requests, concerns, gatherings.','P3 · P5 · P7', xbox(230, 60, 220, 'CUSTODIAN|Direct relation, no desk', 'g')) +
+  hot('YV','Keeps what the desk did for money: statements, invoices, withdrawals and the member ledger.','P8 · P2', xbox(230, 210, 220, 'YV|Statements, invoices, ledger', 'p')) +
+  hot('The Season','Seven steps each season, each season larger (P1).','', xbox(560, 60, 200, 'THE SEASON|P1 · seven steps', 'g')) +
+  hot('Concerns','The Custodian answers, decides, carries it out or assigns it, and records it closed (P5).','', xbox(560, 150, 200, 'CONCERNS|Answered and closed', 'g')) +
+  hot('Gatherings','The Custodian books venues, production, food and printing; YV issues and records the invoices (P7).','', xbox(560, 250, 200, 'GATHERINGS|Venues · production · print', 'p')) +
+  hot('GMP check','Spend and withdrawals listed in V-13 wait for the GMP to approve them.','', xbox(560, 340, 110, 'GMP CHECK|V-13', 'n')) +
+  hot('Friday','Approved withdrawals are paid on Friday.','', xbox(700, 340, 150, 'FRIDAY|Withdrawal paid', 'g'))
+);
+
+/* 25% split */
+put('s-split',
+  `<g class="both">` + flow('M132 180 C190 180 200 222 224 222', 3) + `</g>` +
+  `<g class="sep">` + flow('M132 150 C190 150 200 76 245 76', 3) + flow('M315 76 C420 76 450 140 494 146', 3.2) + flow('M336 222 C420 222 450 166 494 160', 3.2) +
+    tag(280, 134, 'SOURCING 12.5%', 'middle', true) + tag(280, 300, 'CUSTODIAN 12.5%', 'middle') + `</g>` +
+  `<g class="mrg">` + flow('M132 150 C190 150 210 192 245 192', 3) + flow('M336 206 C420 206 450 156 494 152', 2.6) +
+    tag(280, 300, 'SOURCER + CUSTODIAN', 'middle', true) + `</g>` +
+  hot('Fee Income','The residency fee, season fees and any success fee YV receives for the brand. The brand\'s own sales are not included.','', cube(80, 110, 60, 'g') + tag(80, 262, 'FEE INCOME · 100%', 'middle')) +
+  hot('Custodian Share · 12.5%','Goes to the person whose portfolio holds the brand.','', disc(280, 232, 56, 12, 'p') + disc(280, 212, 56, 12, 'p')) +
+  `<g class="stk">` + hot('Sourcing Share · 12.5%','Goes to the Sourcer, who brought the brand in. After leaving, they keep it only while they still hold a YV share.','', cube(280, 36, 40, 'g')) + `</g>` +
+  hot('Weekly consolidation','Once a week, every share earned on the brand is credited to each person\'s Portfolio Account. When the Sourcer is also the Custodian, both shares arrive together on one line.','',
+    `<g class="node">` + disc(540, 150, 46, 14, 'g') + `<ellipse class="ring" cx="540" cy="150" rx="46" ry="23" fill="none" stroke="var(--hi)" stroke-width="2"/></g>` +
+    tag(540, 84, 'WEEKLY CONSOLIDATION', 'middle', true) +
+    `<text x="540" y="110" text-anchor="middle" font-family="var(--mono)" font-size="10.5" letter-spacing=".5" fill="var(--ink2)">TO PORTFOLIO ACCOUNTS</text>`)
+);
+
+/* Weekly clock */
+(function(){ const cx = 300, cy = 190, r = 200;
+  const pt = a => [cx + r*Math.cos(a), cy + r*0.5*Math.sin(a)];
+  const ring = `M${cx+r} ${cy} A${r} ${r*0.5} 0 1 1 ${cx-r} ${cy} A${r} ${r*0.5} 0 1 1 ${cx+r} ${cy}`;
+  const [ax,ay] = pt(-Math.PI/2), [bx,by] = pt(0), [dx,dy] = pt(Math.PI/2), [ex,ey] = pt(Math.PI);
+  put('s-clock', flow(ring, 6) +
+    hot('Weekly consolidation','Once a week, YV adds up the fees received and credits every share.','', disc(cx, cy - 22, 64, 14, 'g') + tag(cx, cy + 38, 'WEEKLY CONSOLIDATION', 'middle', true)) +
+    hot('Fee Income received','Residency, season and success fees received during the week.','', cube(ax, ay - 46, 26, 'n') + tag(ax, ay - 58, 'FEE INCOME RECEIVED', 'middle')) +
+    hot('Shares credited','Every share earned is credited, with a statement for each brand.','', cube(bx, by - 40, 24, 'g') + tag(bx, by + 30, 'SHARES CREDITED', 'middle')) +
+    hot('Portfolio Account','The account in each person\'s name where their shares are credited.','', disc(dx, dy, 30, 8, 'p') + tag(dx, dy + 40, 'PORTFOLIO ACCOUNT', 'middle')) +
+    hot('Friday withdrawals','Money in the Portfolio Account can be withdrawn on Fridays, processed by the GMP or whom the GMP names.','', cube(ex, ey - 40, 24, 'p') + tag(ex, ey + 30, 'FRIDAY WITHDRAWALS', 'middle'))
+  );
+})();
+
+/* The Season: seven steps, then back to the start, larger */
+(function(){
+  const S = [
+    ['STEP 1|Warm circle','Warm circle','The first early-access people come from warm connections, the brand\'s and YV\'s.','g'],
+    ['STEP 2|Focus group','Focus group','They use the product and are heard. Results become case studies, published only with the brand\'s consent.','n'],
+    ['STEP 3|Gathering','Gathering','Communal gatherings with the focus group. The strategic narrative and its branching storylines come from what happens there.','p'],
+    ['STEP 4|Story beat','Story beat','One movement story beat, built from those storylines, that gets people moving to join early access.','n'],
+    ['STEP 5|Early access','Early access','The program opens and the first loyal customers join. Focus-group members get early-bird benefits.','g'],
+    ['STEP 6|Badges and perks','Badges and perks','Commemorative badges and perks reward active participation, and compound as each new capability is added.','p'],
+    ['STEP 7|Season close','Season close','The Custodian and the founder read what grew and set the next season\'s scale.','n'],
+  ];
+  const pos = [[20,60],[250,60],[480,60],[710,60],[710,200],[480,200],[250,200]];
+  let out = small(20, 22, 'P1 · ONE SEASON IS ONE PASS') +
+    flow('M228 82 H250', 1.6) + flow('M458 82 H480', 1.6) + flow('M688 82 H710', 1.6) + flow('M810 104 V192', 2) +
+    flow('M708 222 H690', 1.6) + flow('M478 222 H460', 1.6) + flow('M248 222 C220 222 200 230 182 232', 1.8) + flow('M120 196 V112', 2.2);
+  S.forEach(([label, t, d, tn], i) => { const [x, y] = pos[i];
+    out += hot(t, d, i < S.length - 1 ? 'Next: ' + S[i + 1][1] : 'Next: the next season, larger', xbox(x, y, 200, label, tn)); });
+  out += hot('Each season larger','The next season starts from what the last one grew: more people, more frequent story beats, and early members\' benefits compounding.','Back to step 1',
+    disc(120, 258, 62, 10, 'n') + disc(120, 236, 48, 10, 'p') + disc(120, 216, 34, 10, 'g') + tag(120, 310, 'EACH SEASON LARGER', 'middle', true));
+  put('s-season', out);
+})();
+
+/* From signing to Partner */
+(function(){
+  const S = [
+    ['SIGNING','Signing','The day a contractor signs the Partner Agreement. The lock-up period starts here.',['Partner Agreement','signed'],'n'],
+    ['ELIGIBLE','Eligible','6 months after signing.',['6 months','after signing'],'n'],
+    ['OFFER','Share offer','A written offer with the price, sent at least 30 days before the eligibility date.',['Written, with price,','30+ days before'],'g'],
+    ['ACCEPT','Accept','Accept within 60 days of the offer, or it lapses until the next review.',['Within 60 days','of the offer'],'g'],
+    ['NOTARY','Notary','The purchase is made by deed and recorded, and the Share Purchase & Shareholder Agreement is signed.',['Deed,','Shareholder Agreement'],'g'],
+    ['PARTNER','Partner','Pass the advancement review.',['Review','passed'],'g'],
+  ];
+  const s0 = 50, step = 158;
+  const top = i => 196 - i * 30, cx = i => 82 + i * step;
+  const cubeL = (x, y, sz, p) => { const w = 0.866 * sz, h = sz / 2;
+    return `<polygon class="front" points="${x},${y} ${x+w},${y+h} ${x},${y+2*h} ${x-w},${y+h}" fill="var(--${p}1)" stroke="var(--${p}e)"/>` +
+      `<polygon points="${x-w},${y+h} ${x},${y+2*h} ${x},${y+2*h+sz} ${x-w},${y+h+sz}" fill="var(--${p}2)" stroke="var(--${p}e)"/>` +
+      `<polygon points="${x},${y+2*h} ${x+w},${y+h} ${x+w},${y+h+sz} ${x},${y+2*h+sz}" fill="var(--${p}3)" stroke="var(--${p}e)"/>`; };
+  let d = '';
+  S.forEach((_, i) => { const x = cx(i), y = top(i) + s0 / 2; d += (i ? ' L' : 'M') + `${x} ${y}`; });
+  let out = flow(d, S.length * 0.7) + small(cx(0), top(0) + 2 * s0 + 62, 'LOCK-UP PERIOD STARTS', 'middle');
+  S.forEach(([k, t, desc, cap, p], i) => { const x = cx(i), y = top(i), last = i === S.length - 1;
+    out += hot(t, desc, i < S.length - 1 ? 'Next: ' + S[i + 1][1] : 'Next: candidate for Managing Partner',
+      `<g class="xb">` + cubeL(x, y, s0, last ? 'g' : p) + `</g>` + tag(x, y - 16, k, 'middle', last) +
+      `<text x="${x}" y="${y + 2 * s0 + 26}" text-anchor="middle" font-family="var(--display)" font-size="12" fill="var(--ink2)">${cap[0]}</text>` +
+      `<text x="${x}" y="${y + 2 * s0 + 42}" text-anchor="middle" font-family="var(--display)" font-size="12" fill="var(--ink2)">${cap[1]}</text>`);
+  });
+  out += diamond(cx(5) + 70, top(5) - 20, 9, 'float', true) + diamond(cx(1) - 40, top(1) - 40, 7, 'float', false) + diamond(cx(3) + 60, top(3) + 150, 8, 'float', false);
+  put('s-steps', out);
+})();
+
+/* Protocols: code → [title, who, text, from LTP, change] */
+const P = {
+ 'P1':['The Season','Custodian, with the brand','One season is one pass through seven steps: warm circle, focus group, gathering, story beat, early access, badges and perks, season close. Each season repeats at a larger scale and with more frequent story beats. Season length and seasons a year: <span class="v">V-08</span>.','—','New'],
+ 'P2':['Members and badges','Custodian · YV keeps the ledger','Everyone who joins through a season is recorded as a member with the season they joined. A badge, once earned, is never taken back. Perks are the brand\'s to give, written into the season plan, and an early bird\'s benefits carry into every later season.','—','New'],
+ 'P3':['Duty of care','Custodian','The Custodian is the brand\'s direct relation; nothing about the brand goes through a desk. The Custodian opens a group with only the founder, the official YV account and the Custodian within <span class="v">V-09</span> days of assignment, answers the founder within <span class="v">V-10</span> hours, and checks in every week of a season.','B-02 + desk','New'],
+ 'P4':['Intake and Brand Packet','Sourcer','Before a residency starts, the Sourcer hands in a complete Brand Packet: the signed Residency Agreement, the brand story as the founder tells it, the product\'s state, what the first season should reach, the brand\'s name, marks and assets, and known limits. The Sourcer and Custodian are recorded. An incomplete packet does not start.','B-01','Adapted'],
+ 'P5':['Brand and member concerns','Custodian','Concerns from the founder or from members come to the Custodian directly. The Custodian answers, decides, carries it out or assigns it, and records it closed. A brand with no Custodian is handled by YV.','B-05','Adapted'],
+ 'P6':['Disputes and stakeholder relations','Custodian','The Custodian handles disputes and relations with the founder, members and vendors. Anything still unresolved after <span class="v">V-11</span> days goes to a Managing Partner or the GMP.','B-06','Kept'],
+ 'P7':['Gatherings: vendors and invoicing','Custodian · YV invoices','The Custodian books the venues, production, food and printing a season plan calls for. YV issues and records the invoices. Spend listed in <span class="v">V-13</span> waits for the GMP\'s approval.','B-19','Adapted'],
+ 'P8':['Weekly consolidation and withdrawals','YV · the GMP or whom the GMP names','At each weekly consolidation, every share earned is credited to the person\'s Portfolio Account, with a statement for each brand. With no concierge, the GMP or whom the GMP names processes withdrawals on Fridays. Withdrawals listed in <span class="v">V-13</span> wait for the GMP\'s approval.','B-15','Adapted'],
+ 'P9':['Training before signing','Managing Partner','A contractor completes 40 hours of training (20 hours at gatherings and 20 hours on a live season beside a Partner) before signing the Partner Agreement. The record is filed with the agreement.','B-08','Adapted'],
+ 'P10':['Friday meeting','Everyone, open','There is a team meeting every Friday, open to all and not compulsory: everyone at YV is a contractor, and required attendance can make a contractor look like an employee.','B-07','Adapted'],
+ 'P11':['Titles','Everyone','Use the exact titles in this chart. Only Tier 3 is called Managing Partner.','B-09','Kept'],
+ 'P12':['Conduct','Everyone, at every level','Use professional language in every YV channel. Raise performance problems privately and handle them under P14, not in group chats.','B-10','Kept'],
+ 'P13':['Formal Notices','YV and every signer','Warnings, terminations, share offers, protocol changes and variable settings only count if they come by email from an official YV address or as a document on YV letterhead. Chat apps are for day-to-day work, not formal notices.','B-11','Kept'],
+ 'P14':['Warnings','Managing Partner or GMP','A warning is a Formal Notice that names the protocol or clause broken, says what happened, and gives a date at least 14 days away to fix it by.','B-12','Kept'],
+ 'P15':['Advancement review','Managing Partner + GMP','A review is held on a tier date or when someone asks in writing, on KPI data <span class="v">V-01</span> read from season outcomes and an evaluation. A fail gets 60 days to improve, then a second review; the result can be appealed to the GMP within 10 days.','B-13','Kept'],
+ 'P16':['Share offer and purchase','GMP','The GMP sends a written offer with the price at least 30 days before the eligibility date. It must be accepted within 60 days, or it lapses until the next review. The purchase is made by deed and recorded, and the Share Purchase &amp; Shareholder Agreement is signed.','B-14','Kept'],
+ 'P17':['Leaving','Anyone leaving','On their last day, a person who is leaving returns or deletes all YV materials, data and access. A Managing Partner or the GMP reassigns their portfolio. Their shares follow the leaving table.','B-16','Kept'],
+ 'P18':['Changing protocols and variables','GMP','The GMP changes protocols and variables by Formal Notice to everyone affected, at least 30 days before the change takes effect.','B-17','Kept'],
+};
+const G = [
+  ['BRAND','g',[['P1','The Season'],['P2','Members & badges'],['P3','Duty of care'],['P4','Intake & brand packet']]],
+  ['SERVICE','p',[['P5','Concerns'],['P6','Stakeholder relations'],['P7','Gatherings & invoices']]],
+  ['PAY & SHARES','g',[['P8','Weekly pay & withdrawals'],['P16','Share offer & purchase']]],
+  ['PEOPLE','n',[['P9','Training'],['P10','Friday meeting'],['P15','Advancement review'],['P17','Leaving']]],
+  ['RULES','n',[['P11','Titles'],['P12','Conduct'],['P13','Formal Notices'],['P14','Warnings'],['P18','Changing the rules']]],
+];
+const kcls = c => c === 'New' ? 'k new' : c === 'Removed' ? 'k gone' : 'k';
+let pm = '';
+G.forEach(([name, tn, items], i) => { const x = 14 + i * 190, w = 166, cx = x + w/2 + 4, n = items.length;
+  pm += flow(`M${cx} 46 V${60 + (n - 1) * 80 + 60}`, 2 + n * 0.6);
+  pm += tag(cx, 24, name, 'middle', tn === 'g');
+  items.forEach(([c, t], j) => { const [title, who] = P[c];
+    pm += `<g class="hot" tabindex="0" role="button" data-p="${c}" data-t="${esc(c + ' · ' + title)}" data-d="${esc(who.replace(/&amp;/g,'&'))}">` + xbox(x, 60 + j * 80, w, `${c}|${t}`, tn) + `</g>`; });
+});
+put('s-protos', pm);
+const pcard = document.getElementById('pcard');
+function showP(c){ const [t, w, b, from, ch] = P[c];
+  pcard.innerHTML = `<div><div class="code">${c}</div><h3>${t}</h3><div class="who">${w}</div><div class="from"><span class="${kcls(ch)}">${ch}</span><span class="code">From LTP · ${from}</span></div></div><div class="txt">${b}</div>`;
+  document.querySelectorAll('#s-protos [data-p]').forEach(g => g.querySelector('.xb').classList.toggle('on', g.dataset.p === c)); }
+document.getElementById('s-protos').addEventListener('click', e => { const g = e.target.closest('[data-p]'); if (g) showP(g.dataset.p); });
+document.getElementById('s-protos').addEventListener('keydown', e => { const g = e.target.closest && e.target.closest('[data-p]'); if (g && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); showP(g.dataset.p); } });
+showP('P1');
+
+/* LTP → YV map */
+const MAP = [
+  ['B-01','Intake and Listing Packet','P4 · Intake and Brand Packet','Adapted'],
+  ['B-02','Owner group chat','P3 · Duty of care','Adapted'],
+  ['B-03','Property video','No reception to send it to','Removed'],
+  ['B-04','Photo maintenance','No photo line','Removed'],
+  ['B-05','Guest and owner complaints','P5 · Brand and member concerns','Adapted'],
+  ['B-06','Disputes and stakeholder relations','P6','Kept'],
+  ['B-07','Friday meeting','P10 · open, not compulsory','Adapted'],
+  ['B-08','Training before signing','P9 · gatherings and a live season','Adapted'],
+  ['B-09 – B-14','Titles, conduct, notices, warnings, review, share offer','P11 – P16','Kept'],
+  ['B-15','Weekly consolidation and withdrawals','P8 · processed by YV','Adapted'],
+  ['B-16, B-17','Leaving; changing protocols','P17, P18','Kept'],
+  ['B-18','Bookings and the Reception Booking Commission','The Custodian is the reception','Removed'],
+  ['B-19','Vendors and invoicing','P7 · Gatherings','Adapted'],
+  ['—','No LTP counterpart','P1 · The Season · P2 · Members and badges','New'],
+];
+document.getElementById('maprows').innerHTML = MAP.map(([c, t, y, ch]) =>
+  `<tr${ch === 'Removed' ? ' class="gone"' : ''}><td class="c">${c}</td><td class="t">${t}</td><td>${y}</td><td><span class="${kcls(ch)}">${ch}</span></td></tr>`).join('');
+
+const V = [['V-00','Effective date of this version'],['V-01','Partner KPI targets, read from season outcomes'],['V-02','Share value and discounts'],['V-03','Share lock-up length'],['V-04','Managing Partner thresholds and consecutive quarters'],['V-05','GMP elevation criteria and pay'],['V-06','GMP office share, % of office Fee Income'],['V-07','Partner base pay (none unless set)'],['V-08','Season length and seasons a year'],['V-09','Days to open the brand group'],['V-10','Hours to answer the founder'],['V-11','Days before a dispute goes to a Managing Partner'],['V-12','Weekly consolidation cut-off'],['V-13','Spend and withdrawals needing GMP approval'],['V-14','Share buy-back price'],['V-15','Managing Partner override, if any'],['V-16','Equity a brand grants YV: Partner Share treatment'],['V-17','Markets under the no-competing rule']];
+document.getElementById('varlist').innerHTML = V.map(([c,t]) => `<div><span>${c}</span><span>${t}</span></div>`).join('');
+
+/* calculator */
+const fmt = n => Math.round(n).toLocaleString('en-US');
+function calc(){
+  const F = Math.max(0, parseFloat(document.getElementById('fee').value) || 0);
+  const same = document.getElementById('same').checked;
+  const src = F*0.125, cust = F*0.125;
+  let rows = same ? `<div><span>Sourcer and Custodian (same person)</span><span>${fmt(src + cust)}</span></div>`
+    : `<div><span>Sourcing Share · 12.5%</span><span>${fmt(src)}</span></div><div><span>Custodian Share · 12.5%</span><span>${fmt(cust)}</span></div>`;
+  rows += `<div class="tot"><span>Partner Share total · 25%</span><span>${fmt(src + cust)}</span></div>`;
+  rows += `<div class="yv"><span>YV keeps · 75%</span><span>${fmt(F*0.75)}</span></div>`;
+  document.getElementById('out').innerHTML = rows;
+  const sc = document.getElementById('s-split');
+  if (sc) { const was = sc.classList.contains('merged');
+    sc.classList.toggle('merged', same);
+    if (same !== was) { sc.classList.remove('pulse'); void sc.getBoundingClientRect(); sc.classList.add('pulse'); } }
+}
+const form = document.getElementById('calc');
+form.addEventListener('input', calc); form.addEventListener('submit', e => e.preventDefault()); calc();
+
+/* hover descriptions */
+const tip = document.getElementById('tip'); let tipFor = null;
+function showTip(g, x, y){ tipFor = g;
+  tip.innerHTML = `<b>${g.dataset.t}</b>${g.dataset.d}` + (g.dataset.n ? `<span class="nx">${g.dataset.n}</span>` : '');
+  tip.classList.add('on'); placeTip(x, y); }
+function placeTip(x, y){ const w = tip.offsetWidth, h = tip.offsetHeight, vw = innerWidth, vh = innerHeight;
+  let l = x + 14, t = y + 16; if (l + w > vw - 12) l = Math.max(12, x - w - 14); if (t + h > vh - 12) t = Math.max(12, y - h - 14);
+  tip.style.left = l + 'px'; tip.style.top = t + 'px'; }
+function hideTip(){ tipFor = null; tip.classList.remove('on'); }
+document.addEventListener('pointerover', e => { const g = e.target.closest && e.target.closest('.hot'); if (g && e.pointerType !== 'touch') showTip(g, e.clientX, e.clientY); });
+document.addEventListener('pointermove', e => { if (tipFor && e.pointerType !== 'touch') placeTip(e.clientX, e.clientY); });
+document.addEventListener('pointerout', e => { const g = e.target.closest && e.target.closest('.hot'); if (g && !g.contains(e.relatedTarget)) hideTip(); });
+document.addEventListener('focusin', e => { const g = e.target.closest && e.target.closest('.hot'); if (g) { const r = g.getBoundingClientRect(); showTip(g, r.left + r.width/2, r.bottom); } });
+document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.hot')) hideTip(); });
+window.addEventListener('scroll', hideTip, {passive:true});
+if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('svg').forEach(s => s.pauseAnimations && s.pauseAnimations());
 })();
 </script>

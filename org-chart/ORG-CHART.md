@@ -1,7 +1,7 @@
 # YV Organisation Chart & Protocols
 
 **YV Group · Brands in residence**
-**Draft 0.1 · 2026-11-21 · Part A follows Seonso's words of 2026-11-21; Part B is proposed and waits for his clearance (Part F)**
+**Version 0.2 · 2026-11-21 · Part A from Seonso's words; Parts B and F cleared by Seonso (2026-11-21, card: "Cleared, all eight"); Support removed the same day**
 
 Made from the LTP chart (`Desktop\ltp-daily\org-chart\ORG-CHART.md`, v1.0). YV keeps LTP's ladder above Partner and LTP's 25% split. A brand stands where LTP has a listing.
 
@@ -53,9 +53,8 @@ Roles on a brand, recorded at intake (P4):
 
 - **Sourcer:** brought the brand to YV: introduced the founder and got the signed Residency Agreement.
 - **Custodian:** holds the brand in their portfolio and is the brand's direct relation at YV: runs its seasons, cares for the founder, answers its members, handles disputes. A Contractor can be a Custodian.
-- **Support** (optional): anyone assigned to help the Custodian on that brand's seasons (a gathering host, a creator, a producer).
 
-One person may hold more than one role. A Managing Partner or the GMP assigns the Custodian and any Support.
+One person may hold more than one role. A Managing Partner or the GMP assigns the Custodian. There is no Support role.
 
 ### A4. The 25% Partner Share
 
@@ -65,10 +64,9 @@ One person may hold more than one role. A Managing Partner or the GMP assigns th
 |---|---|---|
 | Sourcing Share | 12.5% | Sourcer |
 | Custodian Share | 12.5% | Custodian |
-| (inside the Custodian Share) Support Share | 5% default | Whoever is assigned as Support; otherwise the Custodian |
 | **Total** | **25%** | |
 
-Support Share rules, leaving and changing, and the weekly clock are LTP's A4.3, A4.4 and A4.5 with "listing" read as "brand": the Custodian may agree 0% to 12.5% with Support in writing; Support who stops the work and does not fix it by a warning's fix-by date loses their part; shares follow the person or return to YV as LTP's table says; Fee Income is consolidated weekly at {V-12}, credited to each Portfolio Account, withdrawn on Fridays. Partners receive no base pay unless the GMP sets one {V-07}.
+There is no Support Share: the Custodian keeps the whole 12.5% (Seonso, 2026-11-21: "support can be removed from the chart. 5%"). Leaving and changing, and the weekly clock, are LTP's A4.4 and A4.5 with "listing" read as "brand": shares follow the person or return to YV as LTP's table says; Fee Income is consolidated weekly at {V-12}, credited to each Portfolio Account, withdrawn on Fridays. Partners receive no base pay unless the GMP sets one {V-07}.
 
 ### A5. Shares
 
@@ -76,7 +74,7 @@ As LTP A5. Who may buy: Contractors 6 months after signing. Price and further pu
 
 ---
 
-## Part B — Protocols (proposed)
+## Part B — Protocols
 
 Each protocol names who does it. Breaking one is handled under P14.
 
@@ -181,14 +179,14 @@ Each protocol names who does it. Breaking one is handled under P14.
 
 ---
 
-## Part F — For clearance (Seonso)
+## Part F — Where the LTP protocols break (cleared by Seonso, 2026-11-21, card: "Cleared, all eight")
 
-| # | Where the LTP protocols break | Proposed |
+| # | Where the LTP protocols break | Cleared |
 |---|---|---|
 | C1 | The early-access loop has no LTP counterpart | P1 in seven steps, one season = one pass; P2 keeps the members |
 | C2 | Desk duties have no desk | To the Custodian: founder requests (P3), concerns (P5), gathering vendors (P7). Statements and withdrawals to YV (P8) |
 | C3 | Desk and photo protocols | Removed: B-03, B-04, B-18, the office (A2.5) and the Reception Booking Commission (A2.6) |
-| C4 | The Support Share was the photographer's | Stays 5% default inside the Custodian Share, for whoever is assigned as Support |
+| C4 | The Support Share was the photographer's | Removed: no Support role, no 5% Support Share; the Custodian keeps the whole 12.5% (Seonso, 2026-11-21: "support can be removed from the chart. 5%"). Replaces the cleared "stays 5% default" |
 | C5 | Fee Income had "never rent" | Residency, season and success fees received; never the brand's sales. Equity: V-16 |
 | C6 | Who gives and keeps perks | Perks are the brand's, written into the season plan; badges never taken back; YV keeps the ledger |
 | C7 | Friday meeting with contractors only | Open, not compulsory |
