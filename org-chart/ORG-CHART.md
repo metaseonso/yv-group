@@ -165,6 +165,9 @@ Each protocol names who does it. Breaking one is handled under P14.
 | V-15 | Managing Partner override, if any | | |
 | V-16 | Equity or tokens a brand grants YV: whether and how the Partner Share applies | | |
 | V-17 | Markets covered by the no-competing rule | | |
+| V-18 | Governing law of the agreements | | |
+| V-19 | Arbitration rules and seat (one arbitrator, in English) | | |
+| V-20 | Training cost contribution when a Partner leaves by choice within 6 months (none unless set) | | |
 
 ---
 
@@ -191,3 +194,17 @@ Each protocol names who does it. Breaking one is handled under P14.
 | C6 | Who gives and keeps perks | Perks are the brand's, written into the season plan; badges never taken back; YV keeps the ledger |
 | C7 | Friday meeting with contractors only | Open, not compulsory |
 | C8 | Ladder and shares | Partner holds a YV share, as at LTP; tiers numbered 1–4 |
+
+---
+
+## Part G — Agreements
+
+Templates in English for international use (Seonso, 2026-11-21: "add template agreements for each role as we do in ltp" and "don't need indonesia, make these fit more international agreements"). Text: `agreements/data.py`; formal copies: `docs/*.pdf`, built by `agreements/build.py`.
+
+| Code | Agreement | Signed by | When |
+|---|---|---|---|
+| YV / PA | Partner Agreement | YV and the Contractor | On entry, after P9; carries through Partner, Managing Partner and GMP |
+| YV / SH | Share Purchase & Shareholder Agreement | YV, the buyer and any transferor | With every share purchase (A5, P16) |
+| YV / RA | Residency Agreement | YV and the brand (its founder) | Before a residency starts (P4) |
+
+Each names the YV company on its cover. Governing law and arbitration follow V-18 and V-19 as they stand on the day of signing. Electronic signatures and counterparts are valid. Each party carries its own taxes; YV withholds only where its law requires.
